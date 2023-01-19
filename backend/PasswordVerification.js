@@ -8,35 +8,31 @@ one number
 one special character
 */
 const hashIteration = 50
+const saltLenght = 128
 
-
-function generateSalt(length) {
-    var result           = '';
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-}
 
 exports.encryptPassword = function(password) {
-    
-    const salt = generateSalt(128) //first, generate the salt.    
+    const salt = crypto.randomBytes(saltLenght).toString('hex') //first, generate the salt.    
     var middle = Math.floor(password.length / 2); //divide the password in two parts
 
     //password is mixed with the salt
     const newPass = salt + password.substr(0, middle) + salt + password.substr(middle) + salt
     
-    var hash = crypto.createHash('sha512').update(newPass).digest('base64');
+    var hash = crypto.createHash('sha512').update(newPass).digest('hex');
     for(var i = 0; i < hashIteration-1; i++) {
-        hash = crypto.createHash('sha512').update(hash).digest('base64');
+        hash = crypto.createHash('sha512').update(hash).digest('hex');
     }
     return hash
 };
+
+exports.generateToken = function() {
+    return crypto.randomBytes(saltLenght).toString('hex');
+};
+
 exports.verifyPasswordStandards = function(password) {
     return re.test(password)
 };
+
 exports.verifyPasswordStrength = function(password) {
     return passwordStrength(password).value
 };
