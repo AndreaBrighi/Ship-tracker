@@ -22,7 +22,7 @@ exports.encryptPassword = function(password) {
     for(var i = 0; i < hashIteration-1; i++) {
         hash = crypto.createHash('sha512').update(hash).digest('hex');
     }
-    return hash
+    return {"hash_pass": hash, "salt": salt, "token": crypto.randomBytes(saltLenght).toString('hex')}
 };
 
 exports.generateToken = function() {

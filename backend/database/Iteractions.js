@@ -8,17 +8,14 @@ mongoose.connect("mongodb://localhost/webProject",
 );
 
 exports.createUser = async function(user, password) {
+	const pass = passVerifier.encryptPassword(password)
     const userCreated = await User.create({username : user,
-											password: passVerifier.encryptPassword(password),
-		 									salt: "maybe",
-											token : "none"});
+											password: pass.hash_pass,
+		 									salt: pass.salt,
+											token : pass.token});
 }
 
 exports.userAlreadyExists = async function(user) {
 	const userFound = await User.find({username: user})
-	console.log(userFound + " " + userFound.length)
-	if(userFound.length > 0)
-		return "found user"
-	else
-		return "not found"
+	return userFound.length > 0
 }
