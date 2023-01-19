@@ -1,11 +1,16 @@
 const crypto = require('crypto')
 const { passwordStrength } = require('check-password-strength')
 const re = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
+/*Minimum eight characters
+at least one uppercase letter
+one lowercase letter
+one number 
+one special character
+*/
+const hashIteration = 50
 
-const hashIteration = 100
 
-
-function makeSalt(length) {
+function generateSalt(length) {
     var result           = '';
     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var charactersLength = characters.length;
@@ -17,7 +22,7 @@ function makeSalt(length) {
 
 exports.encryptPassword = function(password) {
     
-    const salt = makeSalt(128) //first, generate the salt.    
+    const salt = generateSalt(128) //first, generate the salt.    
     var middle = Math.floor(password.length / 2); //divide the password in two parts
 
     //password is mixed with the salt
@@ -29,7 +34,7 @@ exports.encryptPassword = function(password) {
     }
     return hash
 };
-exports.verytyPasswordStandards = function(password) {
+exports.verifyPasswordStandards = function(password) {
     return re.test(password)
 };
 exports.verifyPasswordStrength = function(password) {
