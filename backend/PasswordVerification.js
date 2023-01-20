@@ -25,6 +25,20 @@ exports.encryptPassword = function(password) {
     return {"hash_pass": hash, "salt": salt, "token": crypto.randomBytes(saltLenght).toString('hex')}
 };
 
+
+exports.encryptPasswordGivedSalt = function(password, salt) {
+    var middle = Math.floor(password.length / 2); //divide the password in two parts
+
+    //password is mixed with the salt
+    const newPass = salt + password.substr(0, middle) + salt + password.substr(middle) + salt
+    
+    var hash = crypto.createHash('sha512').update(newPass).digest('hex');
+    for(var i = 0; i < hashIteration-1; i++) {
+        hash = crypto.createHash('sha512').update(hash).digest('hex');
+    }
+    return {"hash_pass": hash, "salt": salt}
+};
+
 exports.generateToken = function() {
     return crypto.randomBytes(saltLenght).toString('hex');
 };
