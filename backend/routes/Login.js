@@ -1,8 +1,8 @@
 const express = require('express');
 const db = require('../database/Iteractions');
 const router = express.Router();
-const passVerifier = require('../PasswordVerification');
 const utils = require('../Utils')
+
 
 //request login based on token
 router.get('/token/:token', async function(req, res) {
@@ -14,11 +14,12 @@ router.get('/token/:token', async function(req, res) {
     res.json({status: "success", message: "correct credentials", payload: (await utils.queryToJSON(response.payload)).token })
 });
 
+
 //request login based on credentials
 router.get("/credentials/:credentials", async function(req, res) {
     const credentials = JSON.parse(req.params.credentials);
     //verify if the credential syntax is correct
-    if(!await utils.verifyCredentialSyntax(credentials, res))
+    if(!await utils.verifyCredentialSyntax_Standard(credentials, res))
         return;
     //if no user has been found, return error message
     const response = await db.loginViaCredentials(credentials); 
@@ -29,32 +30,50 @@ router.get("/credentials/:credentials", async function(req, res) {
     res.json({status: "success", message: "correct credentials", payload: (await utils.queryToJSON(response.payload)).token })
 });
 
+
 //request creation of new user. Syntax: {"username": "","password": ""}
-// {"username":"user", "password": "abAB99&5"}
-router.get("/register/:credentials", async function(req, res) {
-    console.log("something called me")
+router.put("/register/:credentials", async function(req, res) {
     const credentials = JSON.parse(req.params.credentials);
     //verify if the credential syntax is correct
-    if(!await utils.verifyCredentialSyntax(credentials, res))
+    if(!await utils.verifyCredentialSyntax_Standard(credentials, res))
         return;
-    //verify if the password have the minimum requirements
-    if(!passVerifier.verifyPasswordStandards(credentials.password)) {
-        res.json({status: "error", message: "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"})
-        return
-    }
-    //check if the password is easy guessable
-    if(["Too weak", "Weak"].includes(passVerifier.verifyPasswordStrength(credentials.password))) {
-        res.json({status: "error", message: "Your password is very weak and guessable. Try a different password"})
-        return 
-    }
+    //verify if the password have the standards required
+    if(!await utils.verifyPassword(credentials.password, res))
+        return;
     //if all checks passed, then check if user already exists
     if(await db.userAlreadyExists(credentials.username)) {
         res.json({status: "error", message: "There is already another user with the same username. Please choose another one"})
         return
     }
     //finally, all check are fine, so register the user
-    await db.createUser(credentials.username, credentials.password)
-    res.json({status: "success", message: "User successfully created"})
+    const response = await db.createUser(credentials)
+    res.json({status: "success", message: "User successfully created", payload: response})
+});
+
+
+//request for changing password. Syntax: {"username": "","password": ""} with password containing the new password
+router.post("/change/password/:credentials", async function(req, res) {
+    const credentials = JSON.parse(req.params.credentials);
+    //verify if the credential syntax is correct
+    if(!await utils.verifyCredentialSyntax_Standard(credentials, res))
+        return;
+    if(!await utils.verifyPassword(credentials.password, res))
+        return;
+    //finally, all check are fine, so register the user
+    const response = await db.changePassword(credentials)
+    res.json(response)
+});
+
+
+//request for changing username. Syntax: {"username": "","newusername": ""} with username containing old username, newusername the new one
+router.post("/change/user/:credentials", async function(req, res) {
+    const credentials = JSON.parse(req.params.credentials);
+    //verify if the credential syntax is correct
+    if(!await utils.verifyCredentialSyntax_ChageUsername(credentials, res))
+        return;
+    //finally, all check are fine, so register the user
+    const response = await db.changeUsername(credentials)
+    res.json(response)
 });
 
 

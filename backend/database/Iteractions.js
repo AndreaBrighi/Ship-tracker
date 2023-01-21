@@ -14,12 +14,13 @@ async function getSalt(user) {
 	return {"found": salt.length > 0, "payload": vals.salt}
 }
 
-exports.createUser = async function(user, password) {
-	const pass = passVerifier.encryptPassword(password)
-    const userCreated = await User.create({username : user,
+exports.createUser = async function(credentials) {
+	const pass = passVerifier.encryptPassword(credentials.password)
+    const userCreated = await User.create({username : credentials.username,
 											password: pass.hash_pass,
 		 									salt: pass.salt,
 											token : pass.token});
+	return userCreated.token
 }
 
 exports.userAlreadyExists = async function(user) {
@@ -30,14 +31,37 @@ exports.userAlreadyExists = async function(user) {
 exports.loginViaCredentials = async function(credentials) {
 	const salt = await getSalt(credentials.username) //get the salt of the user
 	if(salt.length === 0) //if no salt found, the user selected is not existing
-		return {"found": false}
+		return {found: false}
 	//get the user
 	const userFound = await User.find({username: credentials.username,
 									password: passVerifier.encryptPasswordGivedSalt(credentials.password, salt.payload).hash_pass})
-	return {"found":userFound.length > 0, "payload": userFound}
+	return {found:userFound.length > 0, payload: userFound}
 }
 
 exports.loginViaToken = async function(userToken) {
 	const userFound = await User.find({token: userToken})
-	return {"found":userFound.length > 0, "payload": userFound}
+	return {found : userFound.length > 0, payload: userFound}
+}
+
+exports.changePassword = async function(credentials) {
+	//first, we have to check if the user exists. If not, then return error message
+	const userFound = await User.find({username: credentials.username})
+	if(userFound.length === 0) 
+		return {found: false, message: "user does not exists"}
+	
+	const genPassword = passVerifier.encryptPassword(credentials.password)
+	await User.updateOne({username: credentials.username}, 
+						{$set: {password : genPassword.hash_pass, salt: genPassword.salt, token: genPassword.token}})
+	return {status: "success", message: "Password changed successfully"}
+}
+
+exports.changeUsername = async function(credentials) {
+	//first, we have to check if the user exists. If not, then return error message
+	const userFound = await User.find({username: credentials.username})
+	if(userFound.length === 0) 
+		return {found: false, message: "user does not exists"}
+	
+	await User.updateOne({username: credentials.username}, 
+						{$set: {username: credentials.newusername}})
+	return {status: "success", message: "Username changed successfully"}
 }
