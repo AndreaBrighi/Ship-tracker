@@ -1,5 +1,7 @@
 const crypto = require('crypto')
 const { passwordStrength } = require('check-password-strength')
+const db = require('./database/Iteractions')
+
 const re = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
 /*Minimum eight characters
 at least one uppercase letter
@@ -8,10 +10,11 @@ one number
 one special character
 */
 const hashIteration = 50
-const saltLenght = 128
+const saltLenght = 10
 
 
-exports.encryptPassword = function(password) {
+
+exports.encryptPassword = async function(password) {
     const salt = crypto.randomBytes(saltLenght).toString('hex') //first, generate the salt.    
     var middle = Math.floor(password.length / 2); //divide the password in two parts
 
@@ -22,11 +25,11 @@ exports.encryptPassword = function(password) {
     for(var i = 0; i < hashIteration-1; i++) {
         hash = crypto.createHash('sha512').update(hash).digest('hex');
     }
-    return {"hash_pass": hash, "salt": salt, "token": crypto.randomBytes(saltLenght).toString('hex')}
+    return {"hash_pass": hash, "salt": salt, "token": await exports.generateToken()}
 };
 
 
-exports.encryptPasswordGivedSalt = function(password, salt) {
+exports.encryptPasswordGivedSalt = async function(password, salt) {
     var middle = Math.floor(password.length / 2); //divide the password in two parts
 
     //password is mixed with the salt
@@ -36,16 +39,25 @@ exports.encryptPasswordGivedSalt = function(password, salt) {
     for(var i = 0; i < hashIteration-1; i++) {
         hash = crypto.createHash('sha512').update(hash).digest('hex');
     }
-    return {"hash_pass": hash, "salt": salt, "token": crypto.randomBytes(saltLenght).toString('hex')}
+    return {"hash_pass": hash, "salt": salt, "token": await exports.generateToken()}
 };
 
-exports.generateToken = function() {
-    return crypto.randomBytes(saltLenght).toString('hex');
+
+exports.generateToken = async function() {
+    var notFound = true
+    var token = ""
+    while(notFound) {
+        token = crypto.randomBytes(saltLenght).toString('hex');
+        notFound = await db.tokenAlreadyExists(token)
+    }
+    return token;
 };
+
 
 exports.verifyPasswordStandards = function(password) {
     return re.test(password)
 };
+
 
 exports.verifyPasswordStrength = function(password) {
     return passwordStrength(password).value

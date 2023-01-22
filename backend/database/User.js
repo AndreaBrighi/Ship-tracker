@@ -6,6 +6,11 @@ const userSchema = new mongoose.Schema({
 	password: String,
 	salt: String,
 	token: String,
+	userType: { 
+		type: String,
+		enum: ['user','controller'],
+		default: 'user',
+	}
 });
 
 //export the model of the schema created
