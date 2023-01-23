@@ -27,7 +27,7 @@ router.get("/credentials/:credentials", async function(req, res) {
         res.json({status: "error", message: "Wrong credentials"})
         return;
     }
-    res.json({status: "success", message: "correct credentials", payload: (await utils.queryToJSON(response.payload)).token })
+    res.json({status: "success", message: "correct credentials", payload: response.payload})
 });
 
 

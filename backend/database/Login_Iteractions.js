@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("./models/User");
 const passVerifier = require('../PasswordVerification');
+const ship_Iter = require('./Ship_Iteractions')
 const utils = require('../Utils')
 
 mongoose.connect("mongodb://localhost/webProject", 
@@ -59,8 +60,9 @@ exports.loginViaCredentials = async function(credentials) {
 		return {found: false}
 	//get the user
 	const userFound = await User.find({username: credentials.username,
-									password: await passVerifier.encryptPasswordGivedSalt(credentials.password, salt.payload).hash_pass})
-	return {found:userFound.length > 0, payload: userFound}
+									password: await(await passVerifier.encryptPasswordGivedSalt(credentials.password, salt.payload)).hash_pass})
+	const ownShip = await ship_Iter.verifyUserIsShipOwner(credentials.username)
+	return {found:userFound.length > 0, payload: {data: await utils.queryToJSON(userFound), ship: {own: ownShip.found, payload: ownShip.payload}}}
 }
 
 exports.loginViaToken = async function(userToken) {

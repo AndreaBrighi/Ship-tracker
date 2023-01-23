@@ -22,6 +22,11 @@ exports.getAllShips = async function(shipName) {
 	return {found: shipFound.length, payload: shipFound}
 }
 
+exports.verifyUserIsShipOwner = async function(personName) {
+    const shipFound = await Ship.find({owner: personName});
+	return {found: shipFound.length > 0, payload: shipFound}
+}
+
 //TODO finire di vedere se va e come funziona
 exports.registerShip = async function(credentials) {
     if(!credentials.hasOwnProperty("status")) {

@@ -16,7 +16,6 @@ router.get("/getall", async function(req, res) {
     res.json(await db.getAllShips())
 });
 
-
 router.put("/register/:credential", async function(req, res) {
     const credentials = JSON.parse(req.params.credentials);
     //check if credentials are presents
