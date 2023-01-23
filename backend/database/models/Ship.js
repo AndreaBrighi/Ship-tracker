@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const route = require('./Route')
 
 //define the schema of the user in the DB
 const shipSchema = new mongoose.Schema({
@@ -17,4 +16,4 @@ const shipSchema = new mongoose.Schema({
 });
 
 //export the model of the schema created
-module.exports = mongoose.model("Ship", userSchema)
+module.exports = mongoose.model("Ship", shipSchema)

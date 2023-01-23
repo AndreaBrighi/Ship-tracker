@@ -10,4 +10,4 @@ const routeSchema = new mongoose.Schema({
 });
 
 //export the model of the schema created
-module.exports = mongoose.model("Ship", userSchema)
+module.exports = mongoose.model("Ship", routeSchema)

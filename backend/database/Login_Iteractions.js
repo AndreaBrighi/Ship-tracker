@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
-const User = require("./User");
+const User = require("./models/User");
 const passVerifier = require('../PasswordVerification');
 const utils = require('../Utils')
 
 mongoose.connect("mongodb://localhost/webProject", 
-		() => {console.log("connected to db")},
-		e => console.error(e)
+		() => {console.log("Login service connected")},
+		e => console.error("Login service crashed: " + e.message)
 );
 
 async function getSalt(user) {
@@ -14,13 +14,33 @@ async function getSalt(user) {
 	return {"found": salt.length > 0, "payload": vals.salt}
 }
 
-exports.createUser = async function(credentials) {
+exports.createUser = async function(credentials, res) {
 	const pass = await passVerifier.encryptPassword(credentials.password)
-    const userCreated = await User.create({username : credentials.username,
-											password: pass.hash_pass,
-		 									salt: pass.salt,
-											token : pass.token});
-	return userCreated.token
+	var userCreated = ""
+
+	if(credentials.hasOwnProperty("usertype")) {
+		if(['user', 'controller'].includes(credentials.usertype)) {
+			userCreated = await User.create({username : credentials.username,
+													password: pass.hash_pass,
+													salt: pass.salt,
+													token : pass.token,
+													userType: credentials.usertype});
+		}
+		else {
+			res.status(400).send({
+				message: "User type can only be user or controller"
+			});
+			return;
+		}
+	}
+	else {
+		userCreated = await User.create({username : credentials.username,
+			password: pass.hash_pass,
+			salt: pass.salt,
+			token : pass.token,
+			userType: credentials.usertype});
+	}
+	return {status: "success", message: "User successfully created", payload: {token: userCreated.token, userType: userCreated.userType}}
 }
 
 exports.userAlreadyExists = async function(user) {

@@ -1,6 +1,6 @@
 const crypto = require('crypto')
 const { passwordStrength } = require('check-password-strength')
-const db = require('./database/Iteractions')
+const db = require('./database/Login_Iteractions')
 
 const re = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
 /*Minimum eight characters

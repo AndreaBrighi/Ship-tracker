@@ -1,5 +1,5 @@
 const express = require('express');
-const db = require('../database/Iteractions');
+const db = require('../database/Login_Iteractions');
 const router = express.Router();
 const utils = require('../Utils')
 
@@ -19,7 +19,7 @@ router.get('/token/:token', async function(req, res) {
 router.get("/credentials/:credentials", async function(req, res) {
     const credentials = JSON.parse(req.params.credentials);
     //verify if the credential syntax is correct
-    if(!await utils.verifyCredentialSyntax_Standard(credentials, res))
+    if(!await utils.verifyCredentialSyntax_LoginUsername(credentials, res))
         return;
     //if no user has been found, return error message
     const response = await db.loginViaCredentials(credentials); 
@@ -35,7 +35,7 @@ router.get("/credentials/:credentials", async function(req, res) {
 router.put("/register/:credentials", async function(req, res) {
     const credentials = JSON.parse(req.params.credentials);
     //verify if the credential syntax is correct
-    if(!await utils.verifyCredentialSyntax_Standard(credentials, res))
+    if(!await utils.verifyCredentialSyntax_LoginUsername(credentials, res))
         return;
     //verify if the password have the standards required
     if(!await utils.verifyPassword(credentials.password, res))
@@ -46,8 +46,7 @@ router.put("/register/:credentials", async function(req, res) {
         return
     }
     //finally, all check are fine, so register the user
-    const response = await db.createUser(credentials)
-    res.json({status: "success", message: "User successfully created", payload: response})
+    res.json(await db.createUser(credentials, res))
 });
 
 
@@ -55,7 +54,7 @@ router.put("/register/:credentials", async function(req, res) {
 router.post("/change/password/:credentials", async function(req, res) {
     const credentials = JSON.parse(req.params.credentials);
     //verify if the credential syntax is correct
-    if(!await utils.verifyCredentialSyntax_Standard(credentials, res))
+    if(!await utils.verifyCredentialSyntax_LoginUsername(credentials, res))
         return;
     if(!await utils.verifyPassword(credentials.password, res))
         return;
