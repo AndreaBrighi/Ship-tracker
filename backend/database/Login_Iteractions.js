@@ -19,13 +19,13 @@ exports.createUser = async function(credentials, res) {
 	const pass = await passVerifier.encryptPassword(credentials.password)
 	var userCreated = ""
 
-	if(credentials.hasOwnProperty("usertype")) {
-		if(['user', 'controller'].includes(credentials.usertype)) {
+	if(credentials.hasOwnProperty("userType")) {
+		if(['user', 'controller'].includes(credentials.userType)) {
 			userCreated = await User.create({username : credentials.username,
 													password: pass.hash_pass,
 													salt: pass.salt,
 													token : pass.token,
-													userType: credentials.usertype});
+													userType: credentials.userType});
 		}
 		else {
 			res.status(400).send({
@@ -39,7 +39,7 @@ exports.createUser = async function(credentials, res) {
 			password: pass.hash_pass,
 			salt: pass.salt,
 			token : pass.token,
-			userType: credentials.usertype});
+			userType: credentials.userType});
 	}
 	return {status: "success", message: "User successfully created", payload: {token: userCreated.token, userType: userCreated.userType}}
 }
@@ -62,12 +62,16 @@ exports.loginViaCredentials = async function(credentials) {
 	const userFound = await User.find({username: credentials.username,
 									password: await(await passVerifier.encryptPasswordGivedSalt(credentials.password, salt.payload)).hash_pass})
 	const ownShip = await ship_Iter.verifyUserIsShipOwner(credentials.username)
-	return {found:userFound.length > 0, payload: {data: await utils.queryToJSON(userFound), ship: {own: ownShip.found, payload: ownShip.payload}}}
+	const data = {token: userFound[0].token, userType: userFound[0].userType}
+	return {found:userFound.length > 0, payload: {data, ship: {own: ownShip.found, payload: ownShip.payload}}}
 }
 
 exports.loginViaToken = async function(userToken) {
 	const userFound = await User.find({token: userToken})
-	return {found : userFound.length > 0, payload: userFound}
+
+	const ownShip = await ship_Iter.verifyUserIsShipOwner(userFound[0].username)
+	const data = {token: userFound[0].token, userType: userFound[0].userType}
+	return {found:userFound.length > 0, payload: {data, ship: {own: ownShip.found, payload: ownShip.payload}}}
 }
 
 exports.changePassword = async function(credentials) {

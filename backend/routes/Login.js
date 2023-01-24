@@ -11,13 +11,15 @@ router.get('/token/:token', async function(req, res) {
         res.json({status: "error", message: "Token expired"})
         return;
     }
-    res.json({status: "success", message: "correct credentials", payload: (await utils.queryToJSON(response.payload)).token })
+    res.json({status: "success", message: "correct credentials", payload: response.payload})
 });
 
 
 //request login based on credentials
 router.get("/credentials/:credentials", async function(req, res) {
+
     const credentials = JSON.parse(req.params.credentials);
+
     //verify if the credential syntax is correct
     if(!await utils.verifyCredentialSyntax_LoginUsername(credentials, res))
         return;
