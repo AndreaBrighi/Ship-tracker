@@ -12,7 +12,8 @@ const shipSchema = new mongoose.Schema({
 		type: String,
 		enum: ['normal','allarm'],
 		default: 'normal'
-	}
+	},
+	owner: String
 });
 
 //export the model of the schema created

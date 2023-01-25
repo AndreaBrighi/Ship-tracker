@@ -13,33 +13,65 @@ exports.shipAlreadyExisting = async function(shipName) {
 }
 
 exports.getSingleShip = async function(shipName) {
-	const shipFound = await Ship.find({name: shipName}).select('-_id');
-	return {found:userFound.length > 0, payload: shipFound}
+	const shipFound = await Ship.find({name: shipName}).select(["-_id", "-__v"]);
+	return {found:shipFound.length > 0, payload: shipFound}
 }
 
 exports.getAllShips = async function(shipName) {
-	const shipFound = await Ship.find().select('-_id');
+	const shipFound = await Ship.find().select(["-_id", "-__v"]);
 	return {found: shipFound.length, payload: shipFound}
 }
 
 exports.verifyUserIsShipOwner = async function(personName) {
-    const shipFound = await Ship.find({owner: personName});
-	return {found: shipFound.length > 0, payload: shipFound}
+    const shipFound = await Ship.find({owner: personName}).select(["-_id", "-__v"]);
+	return {found: shipFound.length > 0, payload: shipFound[0]} //ship return an array, but we know the relation is 1-1, so just take the first element
 }
 
-//TODO finire di vedere se va e come funziona
-exports.registerShip = async function(credentials) {
-    if(!credentials.hasOwnProperty("status")) {
-        const shipCreated = await Ship.create({name : credentials.name,
-                                                choosed_route: credentials.choosed_route,
-                                                actual_position: credentials.actual_position,
-                                                status : credentials.status});
+exports.registerShip = async function(shipData) {
+    var shipCreated = ""
+    if(!shipData.hasOwnProperty("status")) {
+        shipCreated = await Ship.create({name : shipData.name,
+                                                choosed_route: shipData.choosed_route,
+                                                actual_position: shipData.actual_position,
+                                                status : shipData.status,
+                                                owner: shipData.owner});
     }
     else 
-        if(!credentials.hasOwnProperty("status")) {
-            const shipCreated = await Ship.create({name : credentials.name,
-                                                    choosed_route: credentials.choosed_route,
-                                                    actual_position: credentials.actual_position});
+        if(!shipData.hasOwnProperty("status")) {
+            shipCreated = await Ship.create({name : shipData.name,
+                                                    choosed_route: shipData.choosed_route,
+                                                    actual_position: shipData.actual_position,
+                                                    owner: shipData.owner});
             }
+    return shipCreated
     
+}
+
+exports.setAllarmStatus = async function(shipName) {
+    const shipFound = await Ship.find({name: shipName}).select(["-_id", "-__v"]);
+    console.log(shipFound)
+    if(shipFound.length === 0) 
+        return {status: "error", message: "The choosed ship does not exist"}
+    await Ship.updateOne({name: shipName}, 
+            {$set: {status: 'allarm'}})
+    return {status: "success", message: "Status changed to allarm"}
+}
+
+exports.setNormalStatus = async function(shipName) {
+    const shipFound = await Ship.find({name: shipName}).select(["-_id", "-__v"]);
+    if(shipFound.length === 0) 
+        return {status: "error", message: "The choosed ship does not exist"}
+    await Ship.updateOne({name: shipName}, 
+            {$set: {status: 'normal'}})
+    return {status: "success", message: "Status changed to normal"}
+}
+
+exports.getAllShips_NormalStatus = async function() {
+    const shipFound = await Ship.find({status: "normal"}).select(["-_id", "-__v"]);
+	return {found: shipFound.length, payload: shipFound}
+}
+
+exports.getAllShips_AllarmStatus = async function() {
+    const shipFound = await Ship.find({status: "allarm"}).select(["-_id", "-__v"]);
+	return {found: shipFound.length, payload: shipFound}
 }

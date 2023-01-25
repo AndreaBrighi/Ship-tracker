@@ -8,7 +8,7 @@ const utils = require('../Utils')
 router.get('/token/:token', async function(req, res) {
     const response = await db.loginViaToken(req.params.token); 
     if(!response.found) {
-        res.json({status: "error", message: "Token expired"})
+        res.json({status: "error", message: "No user found. Login with credentials"})
         return;
     }
     res.json({status: "success", message: "correct credentials", payload: response.payload})

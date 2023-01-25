@@ -68,7 +68,8 @@ exports.loginViaCredentials = async function(credentials) {
 
 exports.loginViaToken = async function(userToken) {
 	const userFound = await User.find({token: userToken})
-
+	if(userFound.length === 0 ) 
+		return {found:userFound.length > 0 }
 	const ownShip = await ship_Iter.verifyUserIsShipOwner(userFound[0].username)
 	const data = {token: userFound[0].token, userType: userFound[0].userType}
 	return {found:userFound.length > 0, payload: {data, ship: {own: ownShip.found, payload: ownShip.payload}}}

@@ -55,6 +55,12 @@ exports.verifyCredentialSyntax_ShipRegister = async function(credentials, res) {
         });
         return false;
     }
+    if(!credentials.hasOwnProperty("owner")) {
+        res.status(400).send({
+            message: "Ship must contain the owner field"
+        });
+        return false;
+    }
     return true;
 }
 
