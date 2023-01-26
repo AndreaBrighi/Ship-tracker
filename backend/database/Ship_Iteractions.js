@@ -44,7 +44,6 @@ exports.registerShip = async function(shipData) {
                                                     owner: shipData.owner});
             }
     return shipCreated
-    
 }
 
 exports.setAllarmStatus = async function(shipName) {

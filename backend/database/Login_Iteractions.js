@@ -91,9 +91,15 @@ exports.changeUsername = async function(credentials) {
 	//first, we have to check if the user exists. If not, then return error message
 	const userFound = await User.find({username: credentials.username})
 	if(userFound.length === 0) 
-		return {found: false, message: "user does not exists"}
+		return {status: "error", message: "User does not exists"}
+	
+	const userFoundExisting = await User.find({username: credentials.newusername})
+		if(userFoundExisting.length > 0) 
+			return {status: "error", message: "The new username already exists"}
 	
 	await User.updateOne({username: credentials.username}, 
 						{$set: {username: credentials.newusername}})
 	return {status: "success", message: "Username changed successfully"}
+
+	//FIXME after changing the user, change also the owner of the ships
 }

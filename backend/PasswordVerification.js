@@ -1,8 +1,7 @@
 const crypto = require('crypto')
-const { passwordStrength } = require('check-password-strength')
 const db = require('./database/Login_Iteractions')
 
-const re = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
+const re = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$");
 /*Minimum eight characters
 at least one uppercase letter
 one lowercase letter
@@ -55,9 +54,4 @@ exports.generateToken = async function() {
 
 exports.verifyPasswordStandards = function(password) {
     return re.test(password)
-};
-
-
-exports.verifyPasswordStrength = function(password) {
-    return passwordStrength(password).value
 };

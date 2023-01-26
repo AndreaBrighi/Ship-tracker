@@ -2,6 +2,8 @@ const express = require('express');
 const db = require('../database/Ship_Iteractions');
 const router = express.Router();
 const utils = require('../Utils')
+const models = require("../data_models/models")
+router.use(express.json());
 
 
 router.get("/getsingle/:name", async function(req, res) {
@@ -25,18 +27,19 @@ router.get("/getall/normal", async function(req, res) {
 });
 
 
-router.put("/register/:credentials", async function(req, res) {
-    console.log(req.params.credentials)
-    const credentials = JSON.parse(req.params.credentials);
-    //check if credentials are presents
-    if(!utils.verifyCredentialSyntax_ShipRegister(credentials, res))
+router.put("/register", async function(req, res) {
+    //verify if the request are corrects
+    if (!utils.matches(req.body, models.registerShip())) {
+        res.send('Request body is invalid. Provide an username and newusername fields');
         return;
+    }
+
     //check if the name is already been used
-    if(await db.shipAlreadyExisting(credentials.name)) {
+    if(await db.shipAlreadyExisting(req.body.name)) {
         res.json({status: "error", message: "ship name already used"})
         return;
     }
-    const result = utils.queryToJSON(await db.registerShip(credentials))
+    const result = await utils.queryToJSON(await db.registerShip(req.body))
     res.json({status: "success", message: "Ship registered successfully", payload: result})
 });
 
