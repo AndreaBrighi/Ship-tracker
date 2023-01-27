@@ -30,7 +30,9 @@ router.get("/getall/normal", async function(req, res) {
 router.put("/register", async function(req, res) {
     //verify if the request are corrects
     if (!utils.matches(req.body, models.registerShip())) {
-        res.send('Request body is invalid. Provide an username and newusername fields');
+        res.status(400).send({
+            message: "Invalid request. Check documentation for syntax"
+        });
         return;
     }
 
@@ -39,7 +41,7 @@ router.put("/register", async function(req, res) {
         res.json({status: "error", message: "ship name already used"})
         return;
     }
-    const result = await utils.queryToJSON(await db.registerShip(req.body))
+    const result = await utils.resultToJSON(await db.registerShip(req.body))
     res.json({status: "success", message: "Ship registered successfully", payload: result})
 });
 
@@ -55,8 +57,10 @@ router.post("/change/tonormal/:shipName", async function(req, res) {
 
 router.post("/change/owner", async function(req, res) {
     //verify if the request are corrects
-    if (!utils.matches(req.body, models.registerShip())) {
-        res.send('Request body is invalid. Provide an username and newusername fields');
+    if (!utils.matches(req.body, models.newShipOwner())) {
+        res.status(400).send({
+            message: "Invalid request. Check documentation for syntax"
+        });
         return;
     }
 });

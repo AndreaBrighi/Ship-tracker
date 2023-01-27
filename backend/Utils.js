@@ -56,8 +56,12 @@ exports.verifyCredentialSyntax_ShipRegister = async function(credentials, res) {
     return true;
 }
 
-exports.queryToJSON = async function(query) {
+exports.resultsToJSON = async function(query) {
     return JSON.parse(JSON.stringify(query[0]));
+}
+
+exports.resultToJSON = async function(query) {
+    return JSON.parse(JSON.stringify(query));
 }
 
 exports.verifyPassword = async function(password, res) {
@@ -70,6 +74,5 @@ exports.verifyPassword = async function(password, res) {
 }
 
 exports.matches = function(body, rules) {
-    console.log("(UTILS) errors from validation: " + v.validate(body, rules).errors)
     return v.validate(body, rules).valid;
 }

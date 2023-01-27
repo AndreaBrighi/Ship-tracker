@@ -13,7 +13,7 @@ async function getSalt(user) {
 	const salt = await User.find({username: user})
 	if(salt.length === 0)
 		return {found: false}
-	const vals = await utils.queryToJSON(salt)
+	const vals = await utils.resultsToJSON(salt)
 	return {found: true, payload: vals.salt}
 }
 
@@ -97,13 +97,21 @@ exports.changeUsername = async function(credentials) {
 	if(userFound.length === 0) 
 		return {status: "error", message: "User does not exists"}
 	
+	//check if the new username already exists
 	const userFoundExisting = await User.find({username: credentials.newusername})
 		if(userFoundExisting.length > 0) 
 			return {status: "error", message: "The new username already exists"}
 	
+
+	//username available, so time to update his ship, if exists
+	const ship = await ship_Iter.verifyUserIsShipOwner(credentials.username)
+	if(ship.found) { //update ship credentials only if the user have a ship
+		const shipRes = await ship_Iter.changeShipOwner(ship.payload.name, credentials.newusername)
+		if(shipRes === false)
+			return {status: "failed", message: "Something went wrong"}
+	}
+	//if ship does not exists (or at the end of the computation), change the user name
 	await User.updateOne({username: credentials.username}, 
 						{$set: {username: credentials.newusername}})
 	return {status: "success", message: "Username changed successfully"}
-
-	//FIXME after changing the user, change also the owner of the ships
 }

@@ -71,3 +71,21 @@ exports.registerShip = function() {
         ]
       }
 }
+
+exports.newShipOwner = function() {
+  return {
+    "type": "object",
+    "properties": {
+      "shipname": {
+        "type": "string"
+      },
+      "newowner": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "shipname",
+      "newowner"
+    ]
+  }
+}

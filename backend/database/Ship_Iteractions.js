@@ -28,21 +28,10 @@ exports.verifyUserIsShipOwner = async function(personName) {
 }
 
 exports.registerShip = async function(shipData) {
-    var shipCreated = ""
-    if(!shipData.hasOwnProperty("status")) {
-        shipCreated = await Ship.create({name : shipData.name,
-                                                choosed_route: shipData.choosed_route,
-                                                actual_position: shipData.actual_position,
-                                                status : shipData.status,
-                                                owner: shipData.owner});
-    }
-    else 
-        if(!shipData.hasOwnProperty("status")) {
-            shipCreated = await Ship.create({name : shipData.name,
-                                                    choosed_route: shipData.choosed_route,
-                                                    actual_position: shipData.actual_position,
-                                                    owner: shipData.owner});
-            }
+    const shipCreated = await Ship.create({name : shipData.name,
+                                            choosed_route: shipData.choosed_route,
+                                            actual_position: shipData.actual_position,
+                                            owner: shipData.owner});
     return shipCreated
 }
 
@@ -73,4 +62,13 @@ exports.getAllShips_NormalStatus = async function() {
 exports.getAllShips_AllarmStatus = async function() {
     const shipFound = await Ship.find({status: "allarm"}).select(["-_id", "-__v"]);
 	return {found: shipFound.length, payload: shipFound}
+}
+
+exports.changeShipOwner = async function(shipName, newOwner) {
+    const shipFound = await Ship.find({name: shipName}).select(["-_id", "-__v"]);
+    if(shipFound.length === 0)
+        return {status: false}
+    await Ship.updateOne({ship: shipName}, 
+        {$set: {owner: newOwner}})
+    return {status: "success", message: "Owner changed successfully"}
 }
