@@ -53,5 +53,12 @@ router.post("/change/tonormal/:shipName", async function(req, res) {
     res.json(await db.setNormalStatus(req.params.shipName))
 });
 
+router.post("/change/owner", async function(req, res) {
+    //verify if the request are corrects
+    if (!utils.matches(req.body, models.registerShip())) {
+        res.send('Request body is invalid. Provide an username and newusername fields');
+        return;
+    }
+});
 
 module.exports = router

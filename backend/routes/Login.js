@@ -6,7 +6,6 @@ const models = require('../data_models/models')
 router.use(express.json());
 
 
-//request login based on token
 router.get('/token/:token', async function(req, res) {
     const response = await db.loginViaToken(req.params.token); 
     if(!response.found) {
@@ -17,14 +16,12 @@ router.get('/token/:token', async function(req, res) {
 });
 
 
-//request login based on credentials
 router.get("/credentials/:credentials", async function(req, res) {
-
     const credentials = JSON.parse(req.params.credentials);
-
-    //verify if the credential syntax is correct
-    if(!await utils.verifyCredentialSyntax_LoginUsername(credentials, res))
+    if (!utils.matches(credentials, models.loginCredentials())) {
+        res.send('Request body is invalid. Provide an username and password');
         return;
+    }
     //if no user has been found, return error message
     const response = await db.loginViaCredentials(credentials); 
     if(!response.found) {
@@ -35,7 +32,6 @@ router.get("/credentials/:credentials", async function(req, res) {
 });
 
 
-//request creation of new user. Syntax: {"username": "","password": ""}
 router.put("/register", async function(req, res) {
     //verify if the request are corrects
     if (!utils.matches(req.body, models.loginCredentials())) {
@@ -55,7 +51,6 @@ router.put("/register", async function(req, res) {
 });
 
 
-//request for changing password. Syntax: {"username": "","password": ""} with password containing the new password
 router.post("/change/password", async function(req, res) {
     //verify if the request are corrects
     if (!utils.matches(req.body, models.loginCredentials())) {
@@ -70,7 +65,6 @@ router.post("/change/password", async function(req, res) {
 });
 
 
-//request for changing username. Syntax: {"username": "","newusername": ""} with username containing old username, newusername the new one
 router.post("/change/user", async function(req, res) {
     //verify if the request are corrects
     if (!utils.matches(req.body, models.changeUserUsername())) {

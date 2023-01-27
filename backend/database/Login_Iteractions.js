@@ -11,8 +11,10 @@ mongoose.connect("mongodb://localhost/webProject",
 
 async function getSalt(user) {
 	const salt = await User.find({username: user})
+	if(salt.length === 0)
+		return {found: false}
 	const vals = await utils.queryToJSON(salt)
-	return {"found": salt.length > 0, "payload": vals.salt}
+	return {found: true, payload: vals.salt}
 }
 
 exports.createUser = async function(credentials, res) {
@@ -62,17 +64,19 @@ exports.loginViaCredentials = async function(credentials) {
 	const userFound = await User.find({username: credentials.username,
 									password: await(await passVerifier.encryptPasswordGivedSalt(credentials.password, salt.payload)).hash_pass})
 	const ownShip = await ship_Iter.verifyUserIsShipOwner(credentials.username)
+	if(userFound.length === 0)
+		return {found: false}
 	const data = {token: userFound[0].token, userType: userFound[0].userType}
-	return {found:userFound.length > 0, payload: {data, ship: {own: ownShip.found, payload: ownShip.payload}}}
+	return {found: true, payload: {data, ship: {own: ownShip.found, payload: ownShip.payload}}}
 }
 
 exports.loginViaToken = async function(userToken) {
 	const userFound = await User.find({token: userToken})
 	if(userFound.length === 0 ) 
-		return {found:userFound.length > 0 }
+		return {found: false}
 	const ownShip = await ship_Iter.verifyUserIsShipOwner(userFound[0].username)
 	const data = {token: userFound[0].token, userType: userFound[0].userType}
-	return {found:userFound.length > 0, payload: {data, ship: {own: ownShip.found, payload: ownShip.payload}}}
+	return {found: true, payload: {data, ship: {own: ownShip.found, payload: ownShip.payload}}}
 }
 
 exports.changePassword = async function(credentials) {

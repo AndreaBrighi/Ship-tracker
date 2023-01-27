@@ -1,14 +1,36 @@
 exports.loginCredentials = function() {
     return {
-        username: 'string',
-        password: 'string'
-    };
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "username",
+        "password"
+      ]
+    }
 }
 
 exports.changeUserUsername = function() {
     return {
-        username: 'string',
-        newusername: 'string'
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "newusername": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "username",
+        "newusername"
+      ]
     };
 }
 
