@@ -55,14 +55,16 @@ router.post("/change/tonormal/:shipName", async function(req, res) {
     res.json(await db.setNormalStatus(req.params.shipName))
 });
 
-router.post("/change/owner", async function(req, res) {
+router.post("/change/shipname", async function(req, res) {
     //verify if the request are corrects
-    if (!utils.matches(req.body, models.newShipOwner())) {
+    if (!utils.matches(req.body, models.newShipName())) {
         res.status(400).send({
             message: "Invalid request. Check documentation for syntax"
         });
         return;
     }
+    res.json(await db.changeShipName(req.body.shipname, req.body.newname))
 });
+
 
 module.exports = router

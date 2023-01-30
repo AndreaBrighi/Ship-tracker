@@ -68,7 +68,22 @@ exports.changeShipOwner = async function(shipName, newOwner) {
     const shipFound = await Ship.find({name: shipName}).select(["-_id", "-__v"]);
     if(shipFound.length === 0)
         return {status: false}
-    await Ship.updateOne({ship: shipName}, 
+    await Ship.updateOne({name: shipName}, 
         {$set: {owner: newOwner}})
     return {status: "success", message: "Owner changed successfully"}
+}
+
+exports.changeShipName = async function(shipName, newName) {
+    //first, check if ship exists
+    const shipFound = await Ship.find({name: shipName}).select(["-_id", "-__v"]);
+    if(shipFound.length === 0)
+        return {status: "error", message: "No ship with the specified name"}
+    //now check if exists a ship with the new name
+    const shipNew = await Ship.find({name: newName}).select(["-_id", "-__v"]);
+    if(shipNew.length === 1)
+        return {status: "error", message: "There is already a ship with the specified name"}
+
+    await Ship.updateOne({name: shipName}, 
+        {$set: {name: newName}})
+    return {status: "success", message: "Name changed successfully"}
 }

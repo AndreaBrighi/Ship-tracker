@@ -9,13 +9,16 @@ app.listen(port, () => console.log("Express server running on port " + port))
 
 const loginRouter = require('./routes/login')
 const shipRouter = require('./routes/Ship_handler')
+//const routesRouter = require('./routes/Routes')
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+
 app.use('/login', loginRouter)
 app.use('/shipreq', shipRouter)
+//app.use('/routereq', routesRouter)
 
 
 //

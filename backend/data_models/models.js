@@ -89,3 +89,21 @@ exports.newShipOwner = function() {
     ]
   }
 }
+
+exports.newShipName = function() {
+  return {
+    "type": "object",
+    "properties": {
+      "shipname": {
+        "type": "string"
+      },
+      "newname": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "shipname",
+      "newname"
+    ]
+  }
+}
