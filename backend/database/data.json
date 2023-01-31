@@ -1,0 +1,13 @@
+[
+    {"C1":"New York", "C2": "Londra"},
+    {"C1":"New York", "C2": "Lisbona"},
+    {"C1":"Parigi", "C2": "Londra"},
+    {"C1":"Tunisi", "C2": "Roma"},
+    {"C1":"Roma", "C2": "Genova"},
+    {"C1":"Genova", "C2": "Algeri"},
+    {"C1":"Genova", "C2": "Valencia"},
+    {"C1":"Algeri", "C2": "Valencia"},
+    {"C1":"Algeri", "C2": "Lisbona"},
+    {"C1":"Algeri", "C2": "Casablanca"},
+    {"C1":"Lisbona", "C2": "Casablanca"}
+]

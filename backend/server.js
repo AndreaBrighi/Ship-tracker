@@ -9,7 +9,8 @@ app.listen(port, () => console.log("Express server running on port " + port))
 
 const loginRouter = require('./routes/Login')
 const shipRouter = require('./routes/Ship_handler')
-//const routesRouter = require('./routes/Routes')
+const routesRouter = require('./routes/Route_handler')
+
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -19,7 +20,7 @@ app.use(function(req, res, next) {
 
 app.use('/login', loginRouter)
 app.use('/shipreq', shipRouter)
-//app.use('/routereq', routesRouter)
+app.use('/routereq', routesRouter)
 
 
 //

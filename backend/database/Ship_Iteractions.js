@@ -18,7 +18,7 @@ exports.getSingleShip = async function(shipName) {
 }
 
 exports.getAllShips = async function(shipName) {
-	const shipFound = await Ship.find().select(["-_id", "-__v"]);
+	const shipFound = await Ship.find().select(["-_id", "-__v"]).sort({name:1});
 	return {found: shipFound.length, payload: shipFound}
 }
 
@@ -55,12 +55,12 @@ exports.setNormalStatus = async function(shipName) {
 }
 
 exports.getAllShips_NormalStatus = async function() {
-    const shipFound = await Ship.find({status: "normal"}).select(["-_id", "-__v"]);
+    const shipFound = await Ship.find({status: "normal"}).select(["-_id", "-__v"]).sort({name:1});
 	return {found: shipFound.length, payload: shipFound}
 }
 
 exports.getAllShips_AllarmStatus = async function() {
-    const shipFound = await Ship.find({status: "allarm"}).select(["-_id", "-__v"]);
+    const shipFound = await Ship.find({status: "allarm"}).select(["-_id", "-__v"]).sort({name:1});
 	return {found: shipFound.length, payload: shipFound}
 }
 
