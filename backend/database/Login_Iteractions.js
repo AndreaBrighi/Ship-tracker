@@ -3,6 +3,12 @@ const User = require("./models/User");
 const passVerifier = require('../PasswordVerification');
 const ship_Iter = require('./Ship_Iteractions')
 const utils = require('../Utils')
+const jwt = require("jsonwebtoken")
+
+
+const jwtKey = "my_secret_key"
+const jwtExpirySeconds = 300
+
 
 mongoose.connect("mongodb://localhost/webProject", 
 		() => {console.log("Login service connected")},
@@ -43,6 +49,15 @@ exports.createUser = async function(credentials, res) {
 			token : pass.token,
 			userType: credentials.userType});
 	}
+
+	const user = credentials.username
+	const token = jwt.sign({ user }, jwtKey, {
+	algorithm: "HS256",
+	expiresIn: jwtExpirySeconds})
+
+	console.log("token:", token)
+	res.cookie("token", token, { maxAge: jwtExpirySeconds * 1000 })
+
 	return {status: "success", message: "User successfully created", payload: {token: userCreated.token, userType: userCreated.userType}}
 }
 

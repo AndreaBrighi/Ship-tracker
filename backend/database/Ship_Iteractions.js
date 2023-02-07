@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Ship = require("./models/Ship");
+const Route = require("./models/Route");
 const utils = require('../Utils')
 
 mongoose.connect("mongodb://localhost/webProject", 
@@ -86,4 +87,21 @@ exports.changeShipName = async function(shipName, newName) {
     await Ship.updateOne({name: shipName}, 
         {$set: {name: newName}})
     return {status: "success", message: "Name changed successfully"}
+}
+
+exports.getShipsWithRoute = async function(routeName) {
+    const shipFound = await Ship.find({choosed_route: routeName}).select(["-_id", "-__v"]).sort({name:1});
+	return {found: shipFound.length, payload: shipFound}
+}
+
+exports.changeRoute = async function(shipName, newRoute) {
+    const shipFound = await Ship.find({name: shipName}).select(["-_id", "-__v"]);
+    if(shipFound.length === 0)
+        return {status: "error", message: "Ship not found"}
+    const routeFound = await Route.find({name: newRoute}).select(["-_id", "-__v"]);
+    if(routeFound.length === 0)
+        return {status: "error", message: "Route not found"}
+    await Ship.updateOne({name: shipName}, 
+        {$set: {choosed_route: newRoute}})
+    return {status: "success", message: "Route changed successfully"}
 }
