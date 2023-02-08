@@ -9,7 +9,9 @@ mongoose.connect("mongodb://localhost/webProject",
 );
 
 exports.storeMessage = async function(messageJSON) {
-    const messagesCounter = await Message.find({sender: messageJSON.sender, reciver: messageJSON.reciver}).select(["-_id", "-__v"]);
+    const messagesCounter = await Message.find({$or:[
+                                            {sender: messageJSON.sender, reciver: messageJSON.reciver},
+                                            {sender: messageJSON.reciver, reciver: messageJSON.sender}]})
     await Message.create({sender : messageJSON.sender,
                         reciver: messageJSON.reciver,
                         message: messageJSON.message,
@@ -18,7 +20,9 @@ exports.storeMessage = async function(messageJSON) {
 }
 
 exports.getMessages_From_To = async function(msgSender, msgReciver) {
-    const allMessages = await Message.find({sender: msgSender, reciver: msgReciver}).select(["-_id", "-__v"]).sort({counter:1});
+    const allMessages = await Message.find({$or:[
+                                            {sender: msgSender, reciver: msgReciver},
+                                            {sender: msgReciver, reciver: msgSender}]})
+                                            .select(["-_id", "-__v"]).sort({counter:1});
     return {size: allMessages.length, payload: allMessages}
 }
-
