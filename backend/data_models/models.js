@@ -107,3 +107,21 @@ exports.newShipName = function() {
     ]
   }
 }
+
+exports.shipChangeRoute = function() {
+  return {
+    "type": "object",
+    "properties": {
+      "shipname": {
+        "type": "string"
+      },
+      "newroute": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "shipname",
+      "newroute"
+    ]
+  }
+}

@@ -26,6 +26,10 @@ router.get("/getall/normal", async function(req, res) {
     res.json(await db.getAllShips_NormalStatus())
 });
 
+router.get("/getall/byroute/:route", async function(req, res) {
+    res.json(await db.getShipsWithRoute(req.params.route))
+});
+
 
 router.put("/register", async function(req, res) {
     //verify if the request are corrects
@@ -64,6 +68,17 @@ router.post("/change/shipname", async function(req, res) {
         return;
     }
     res.json(await db.changeShipName(req.body.shipname, req.body.newname))
+});
+
+router.post("/change/route", async function(req, res) {
+    //verify if the request are corrects
+    if (!utils.matches(req.body, models.shipChangeRoute())) {
+        res.status(400).send({
+            message: "Invalid request. Check documentation for syntax"
+        });
+        return;
+    }
+    res.json(await db.changeRoute(req.body.shipname, req.body.newroute))
 });
 
 
