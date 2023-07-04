@@ -3,7 +3,7 @@ const Message = require('./models/Messages')
 
 
 //opening connection
-mongoose.connect("mongodb://localhost/webProject", 
+mongoose.connect("mongodb://mongodb/webProject", 
 		() => { console.log("Message service connected")},
 		e => console.error("Error with routes service: " + e.message)
 );

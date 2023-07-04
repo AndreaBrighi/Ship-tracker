@@ -10,7 +10,7 @@ const jwtKey = "my_secret_key"
 const jwtExpirySeconds = 300
 
 
-mongoose.connect("mongodb://localhost/webProject", 
+mongoose.connect("mongodb://mongodb/webProject", 
 		() => {console.log("Login service connected")},
 		e => console.error("Login service crashed: " + e.message)
 );

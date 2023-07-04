@@ -3,7 +3,7 @@ const Ship = require("./models/Ship");
 const Route = require("./models/Route");
 const utils = require('../Utils')
 
-mongoose.connect("mongodb://localhost/webProject", 
+mongoose.connect("mongodb://mongodb/webProject", 
 		() => {console.log("Ship service connected")},
 		e => console.error("Ship service crashed: " + e.message)
 );

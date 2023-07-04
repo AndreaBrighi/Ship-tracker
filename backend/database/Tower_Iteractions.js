@@ -3,7 +3,7 @@ const Tower = require('./models/Tower')
 
 
 //opening connection
-mongoose.connect("mongodb://localhost/webProject", 
+mongoose.connect("mongodb://mongodb/webProject", 
 		() => {
             console.log("Tower service connected")
         },

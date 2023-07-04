@@ -7,7 +7,7 @@ const fs = require('fs')
 const filePath = path.resolve(__dirname, './data.json')
 
 //opening connection
-mongoose.connect("mongodb://localhost/webProject", 
+mongoose.connect("mongodb://mongodb/webProject", 
 		() => {
             console.log("Routes service connected")
             fs.readFile(filePath, (err, data) => {

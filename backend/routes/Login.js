@@ -12,12 +12,12 @@ router.get('/token/:token', async function(req, res) {
         res.json({status: "error", message: "No user found. Login with credentials"})
         return;
     }
-    res.json({status: "success", message: "correct credentials", payload: response.payload})
+    res.json(response.payload)
 });
 
 
-router.get("/credentials/:credentials", async function(req, res) {
-    const credentials = JSON.parse(req.params.credentials);
+router.post("/credentials", async function(req, res) {
+    const credentials = req.body;
     if (!utils.matches(credentials, models.loginCredentials())) {
         res.send('Request body is invalid. Provide an username and password');
         return;
@@ -25,14 +25,14 @@ router.get("/credentials/:credentials", async function(req, res) {
     //if no user has been found, return error message
     const response = await db.loginViaCredentials(credentials); 
     if(!response.found) {
-        res.json({status: "error", message: "Wrong credentials"})
+        res.status(401).send('Wrong credentials')
         return;
     }
-    res.json({status: "success", message: "correct credentials", payload: response.payload})
+    res.json(response.payload)
 });
 
 
-router.put("/register", async function(req, res) {
+router.post("/register", async function(req, res) {
     //verify if the request are corrects
     if (!utils.matches(req.body, models.loginCredentials())) {
         res.send('Request body is invalid. Provide an username and password');
@@ -51,7 +51,7 @@ router.put("/register", async function(req, res) {
 });
 
 
-router.post("/change/password", async function(req, res) {
+router.put("/change/password", async function(req, res) {
     //verify if the request are corrects
     if (!utils.matches(req.body, models.loginCredentials())) {
         res.send('Request body is invalid. Provide an username and password');
@@ -65,7 +65,7 @@ router.post("/change/password", async function(req, res) {
 });
 
 
-router.post("/change/user", async function(req, res) {
+router.put("/change/user", async function(req, res) {
     //verify if the request are corrects
     if (!utils.matches(req.body, models.changeUserUsername())) {
         res.send('Request body is invalid. Provide an username and newusername fields');
