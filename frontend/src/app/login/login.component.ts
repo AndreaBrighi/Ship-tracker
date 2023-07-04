@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import message from 'src/data/message';
 import user from 'src/data/user';
 import { LoggerService } from '../logger.service';
+import { BackendService } from '../backend.service';
+import { catchError } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -14,24 +16,30 @@ export class LoginComponent {
   username: string = '';
   password: string = '';
 
-  constructor(private _router: Router, private http: HttpClient, private loggerService: LoggerService) { }
+  constructor(private _router: Router, private http: HttpClient, private loggerService: LoggerService, private backendService: BackendService) { }
 
   login() {
     console.log('login');
-    let credential = {username: this.username, password: this.password};
-    this.http.get<message<user>>('http://localhost:3000/login/credentials/'+encodeURIComponent(JSON.stringify(credential)))
+    this.backendService.login(this.username, this.password)
+    .pipe(
+      catchError((err) => {
+        console.log('error');
+        console.log(err);
+        return [];
+      }))
       .subscribe(
         (data) => {
+          console.log('data');
           console.log(data);
-          if(data.status === 'success') {
-            this.loggerService.login(data.payload);
+          if(data !==  undefined) {
+            this.loggerService.login(data);
             /*localStorage.setItem('token', data.payload.data.token);
             console.log('token set');
             console.log(localStorage.getItem('token'));
             this._router.navigate(['/logged']);*/
           }
         }
-      );
+      )
   }
 
   createuser() {

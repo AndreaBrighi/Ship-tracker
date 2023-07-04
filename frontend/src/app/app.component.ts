@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import message from '../data/message';
 import user from '../data/user';
 import { LoggerService } from './logger.service';
+import { BackendService } from './backend.service';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,7 @@ import { LoggerService } from './logger.service';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private _router: Router, private http: HttpClient, private loggerService: LoggerService) { }
+  constructor(private _router: Router, private http: HttpClient, private loggerService: LoggerService, private backendService: BackendService) { }
 
   title = 'ship tracker';
 
@@ -22,7 +23,7 @@ export class AppComponent implements OnInit {
       this._router.navigate(['/login']);
     }
     else{
-      this.http.get<message<user>>('http://localhost:3000/login/token/'+ localStorage.getItem('token'))
+      this.backendService.getuser(localStorage.getItem('token')!!)
       .subscribe(
         (data) => {
           console.log(data);

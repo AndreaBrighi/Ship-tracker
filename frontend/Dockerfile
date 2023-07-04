@@ -6,7 +6,6 @@ COPY ./ /usr/app
 
 RUN npm install
 RUN npm run build --prod
-EXPOSE 4200
 #stage 2
 FROM nginx:alpine
-COPY --from=node /usr/app/dist/ship-tracker-frontend /usr/share/nginx/html
+COPY --from=node /usr/app/dist/frontend /usr/share/nginx/html
