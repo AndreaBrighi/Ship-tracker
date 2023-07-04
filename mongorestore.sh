@@ -1,0 +1,1 @@
+mongorestore -d webProject /data/webProject

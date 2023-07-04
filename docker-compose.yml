@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - 8080:80
+    depends_on:
+      - backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    networks:
+      - interna
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo
+    ports:
+      - 27017-27019:27017-27019
+    networks:
+      - interna
+    volumes:
+      - ./mongorestore.sh:/docker-entrypoint-initdb.d/mongorestore.sh
+      - ./data:/data
+
+networks:
+  interna:
+    driver: bridge
+    driver_opts:
+       com.docker.network.bridge.name: "brinterna"
+#      com.docker.network.enable_ipv6: "false"
+
