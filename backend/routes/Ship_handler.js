@@ -13,17 +13,17 @@ router.get("/getsingle/:name", async function(req, res) {
 
 
 router.get("/getall", async function(req, res) {
-    res.json(await db.getAllShips())
+    res.json((await db.getAllShips()).payload)
 });
 
 
 router.get("/getall/allarm", async function(req, res) {
-    res.json(await db.getAllShips_AllarmStatus())
+    res.json((await db.getAllShips_AllarmStatus()).payload)
 });
 
 
 router.get("/getall/normal", async function(req, res) {
-    res.json(await db.getAllShips_NormalStatus())
+    res.json((await db.getAllShips_NormalStatus()).payload)
 });
 
 router.get("/getall/byroute/:route", async function(req, res) {
@@ -31,7 +31,7 @@ router.get("/getall/byroute/:route", async function(req, res) {
 });
 
 
-router.put("/register", async function(req, res) {
+router.post("/register", async function(req, res) {
     //verify if the request are corrects
     if (!utils.matches(req.body, models.registerShip())) {
         res.status(400).send({
@@ -42,24 +42,24 @@ router.put("/register", async function(req, res) {
 
     //check if the name is already been used
     if(await db.shipAlreadyExisting(req.body.name)) {
-        res.json({status: "error", message: "ship name already used"})
+        res.status(400).json({message: "ship name already used"})
         return;
     }
     const result = await utils.resultToJSON(await db.registerShip(req.body))
-    res.json({status: "success", message: "Ship registered successfully", payload: result})
+    res.json(result)
 });
 
 
-router.post("/change/toallarm/:shipName", async function(req, res) {
+router.put("/change/toallarm/:shipName", async function(req, res) {
     res.json(await db.setAllarmStatus(req.params.shipName))
 });
 
 
-router.post("/change/tonormal/:shipName", async function(req, res) {
+router.put("/change/tonormal/:shipName", async function(req, res) {
     res.json(await db.setNormalStatus(req.params.shipName))
 });
 
-router.post("/change/shipname", async function(req, res) {
+router.put("/change/shipname", async function(req, res) {
     //verify if the request are corrects
     if (!utils.matches(req.body, models.newShipName())) {
         res.status(400).send({
@@ -70,7 +70,7 @@ router.post("/change/shipname", async function(req, res) {
     res.json(await db.changeShipName(req.body.shipname, req.body.newname))
 });
 
-router.post("/change/route", async function(req, res) {
+router.put("/change/route", async function(req, res) {
     //verify if the request are corrects
     if (!utils.matches(req.body, models.shipChangeRoute())) {
         res.status(400).send({
