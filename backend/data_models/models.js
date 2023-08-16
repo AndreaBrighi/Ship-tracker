@@ -47,16 +47,16 @@ exports.registerShip = function() {
           "actual_position": {
             "type": "object",
             "properties": {
-              "x": {
-                "type": "integer"
+              "longitude": {
+                "type": "number"
               },
-              "y": {
-                "type": "integer"
+              "latitude": {
+                "type": "number"
               }
             },
             "required": [
-              "x",
-              "y"
+              "longitude",
+              "latitude"
             ]
           },
           "owner": {
@@ -122,6 +122,35 @@ exports.shipChangeRoute = function() {
     "required": [
       "shipname",
       "newroute"
+    ]
+  }
+}
+
+exports.shipChangePosition = function() {
+  return {
+    "type": "object",
+    "properties": {
+      "shipname": {
+        "type": "string"
+      },
+      "newposition": {
+        "type": "object",
+        "properties": {
+          "longitude": {
+            "type": "number"
+          },
+          "latitude": {
+            "type": "number"
+          }},
+        "required": [
+          "longitude",
+          "latitude"
+        ]
+      }
+    },
+    "required": [
+      "shipname",
+      "newposition"
     ]
   }
 }
