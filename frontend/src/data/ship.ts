@@ -7,6 +7,6 @@ export interface ship {
 }
 
 export interface coordinates {
-    x: number,
-    y: number
+    latitude: number,
+    longitude: number
 }
