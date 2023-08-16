@@ -81,5 +81,16 @@ router.post("/change/route", async function(req, res) {
     res.json(await db.changeRoute(req.body.shipname, req.body.newroute))
 });
 
+router.put("/change/position", async function(req, res) {
+    //verify if the request are corrects
+    if (!utils.matches(req.body, models.shipChangePosition())) {
+        res.status(400).send({
+            message: "Invalid request. Check documentation for syntax"
+        });
+        return;
+    }
+    res.json(await db.changePosition(req.body.shipname, req.body.newposition))
+});
+
 
 module.exports = router

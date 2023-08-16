@@ -105,3 +105,12 @@ exports.changeRoute = async function(shipName, newRoute) {
         {$set: {choosed_route: newRoute}})
     return {status: "success", message: "Route changed successfully"}
 }
+
+exports.changePosition = async function(shipName, newPosition) {
+    const shipFound = await Ship.find({name: shipName}).select(["-_id", "-__v"]);
+    if(shipFound.length === 0)
+        return {status: "error", message: "Ship not found"}
+    await Ship.updateOne({name: shipName},
+        {$set: {actual_position: newPosition}})
+    return {status: "success", message: "Position changed successfully"}
+}
