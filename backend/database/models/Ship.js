@@ -5,8 +5,8 @@ const shipSchema = new mongoose.Schema({
 	name: String,
 	choosed_route: String,
 	actual_position: {
-        x: Number,
-        y: Number
+		longitude: Number,
+		latitude: Number
     },
 	status: { 
 		type: String,
