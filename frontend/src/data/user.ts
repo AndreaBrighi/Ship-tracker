@@ -1,9 +1,10 @@
 interface user {
     data: userData;
-    ship: shipData
+    ship: shipData;
 }
 
 interface userData {
+    username: string;
     token: string;
     userType: string;
 }
