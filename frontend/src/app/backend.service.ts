@@ -39,8 +39,31 @@ export class BackendService {
         );
     }
 
+    public changePassword(username: String, password: String) {
+      let credential = {username: username, password: password};
+      return this.http.put<message<user>>(this.baseUrl + '/change/password', credential)
+        .pipe(
+          catchError(this.handleError)
+        );
+    }
+
+    public changeUsername(username: String, newUsername: String) {
+      let credential = {username: username, newusername: newUsername};
+      return this.http.put<message<user>>(this.baseUrl + '/change/username', credential)
+        .pipe(
+          catchError(this.handleError)
+        );
+    }
+
     public getShips() {
       return this.http.get<ship[]>(this.baseUrl + '/shipreq/getall')
+        .pipe(
+          catchError(this.handleError)
+        );
+    }
+
+    public getMyShips(user: String) {
+      return this.http.get<ship[]>(this.baseUrl + '/shipreq/getallfor/' + user)
         .pipe(
           catchError(this.handleError)
         );
