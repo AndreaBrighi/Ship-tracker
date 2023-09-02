@@ -81,7 +81,7 @@ exports.loginViaCredentials = async function(credentials) {
 	const ownShip = await ship_Iter.verifyUserIsShipOwner(credentials.username)
 	if(userFound.length === 0)
 		return {found: false}
-	const data = {token: userFound[0].token, userType: userFound[0].userType}
+	const data = {token: userFound[0].token, userType: userFound[0].userType, username: userFound[0].username}
 	return {found: true, payload: {data, ship: {own: ownShip.found, payload: ownShip.payload}}}
 }
 
@@ -90,7 +90,7 @@ exports.loginViaToken = async function(userToken) {
 	if(userFound.length === 0 ) 
 		return {found: false}
 	const ownShip = await ship_Iter.verifyUserIsShipOwner(userFound[0].username)
-	const data = {token: userFound[0].token, userType: userFound[0].userType}
+	const data = {token: userFound[0].token, userType: userFound[0].userType, username: userFound[0].username}
 	return {found: true, payload: {data, ship: {own: ownShip.found, payload: ownShip.payload}}}
 }
 
@@ -98,24 +98,27 @@ exports.changePassword = async function(credentials) {
 	//first, we have to check if the user exists. If not, then return error message
 	const userFound = await User.find({username: credentials.username})
 	if(userFound.length === 0) 
-		return {found: false, message: "user does not exists"}
+		return res.status(400).send({
+			message: "User does not exists"});
 	
 	const genPassword = await passVerifier.encryptPassword(credentials.password)
 	await User.updateOne({username: credentials.username}, 
 						{$set: {password : genPassword.hash_pass, salt: genPassword.salt, token: genPassword.token}})
-	return {status: "success", message: "Password changed successfully"}
+	return { message: "Password changed successfully"}
 }
 
 exports.changeUsername = async function(credentials) {
 	//first, we have to check if the user exists. If not, then return error message
 	const userFound = await User.find({username: credentials.username})
 	if(userFound.length === 0) 
-		return {status: "error", message: "User does not exists"}
+	return res.status(400).send({
+		message: "User does not exists"});
 	
 	//check if the new username already exists
 	const userFoundExisting = await User.find({username: credentials.newusername})
 		if(userFoundExisting.length > 0) 
-			return {status: "error", message: "The new username already exists"}
+		return res.status(400).send({
+			message: "The new username already exists"});
 	
 
 	//username available, so time to update his ship, if exists
@@ -123,10 +126,11 @@ exports.changeUsername = async function(credentials) {
 	if(ship.found) { //update ship credentials only if the user have a ship
 		const shipRes = await ship_Iter.changeShipOwner(ship.payload.name, credentials.newusername)
 		if(shipRes === false)
-			return {status: "failed", message: "Something went wrong"}
+		return res.status(400).send({
+			message: "Something went wrong"});
 	}
 	//if ship does not exists (or at the end of the computation), change the user name
 	await User.updateOne({username: credentials.username}, 
 						{$set: {username: credentials.newusername}})
-	return {status: "success", message: "Username changed successfully"}
+	return {message: "Username changed successfully"}
 }
