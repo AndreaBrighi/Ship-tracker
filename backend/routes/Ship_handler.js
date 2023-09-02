@@ -11,6 +11,10 @@ router.get("/getsingle/:name", async function(req, res) {
     res.json(await db.getSingleShip(req.params.name))
 });
 
+router.get("/getallfor/:name", async function(req, res) {
+    res.json((await db.getAllShipsFor(req.params.name)).payload)
+});
+
 
 router.get("/getall", async function(req, res) {
     res.json((await db.getAllShips()).payload)

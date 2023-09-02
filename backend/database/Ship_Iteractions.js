@@ -18,8 +18,13 @@ exports.getSingleShip = async function(shipName) {
 	return {found:shipFound.length > 0, payload: shipFound}
 }
 
-exports.getAllShips = async function(shipName) {
+exports.getAllShips = async function() {
 	const shipFound = await Ship.find().select(["-_id", "-__v"]).sort({name:1});
+	return {found: shipFound.length, payload: shipFound}
+}
+
+exports.getAllShipsFor = async function(owner) {
+	const shipFound = await Ship.find({owner: owner }).select(["-_id", "-__v"]).sort({name:1});
 	return {found: shipFound.length, payload: shipFound}
 }
 
