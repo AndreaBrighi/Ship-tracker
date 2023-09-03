@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import {MatSelectModule} from '@angular/material/select';
 import { LoggerService } from '../logger.service';
 import { BackendService } from '../backend.service';
 import { catchError } from 'rxjs';
@@ -20,7 +19,9 @@ routes: String[] = [];
 latitude: number = 0.0;
 longitude: number = 0.0;
 
-constructor(private _router: Router, private http: HttpClient, private loggerService: LoggerService, private backendService: BackendService) {
+constructor(private _router: Router, private http: HttpClient, private loggerService: LoggerService, private backendService: BackendService) {}
+
+ngOnInit() {
   this.backendService.getAllRoutes()
   .pipe(
     catchError((err) => {
