@@ -1,8 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import message from 'src/data/message';
-import user from 'src/data/user';
 import { LoggerService } from '../logger.service';
 import { BackendService } from '../backend.service';
 import { catchError } from 'rxjs';
