@@ -1,0 +1,16 @@
+<p>new-ship works!</p>
+<a routerLink="/user/ships">Back to ships list</a>
+<form>
+   <input type="text" [(ngModel)]="newShipName" name="NewShipName" placeholder="New ship name">
+   <mat-form-field>
+      <mat-label>Route</mat-label>
+      <mat-select>
+        <mat-option  *ngFor="let route of routes" [value]="route">
+          {{route}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+   <input type="number" [(ngModel)]="latitude" name="latitude" placeholder="0.0">
+   <input type="number" [(ngModel)]="longitude" name="longitude" placeholder="0.0">
+   <button (click)="addShip()">Add ship</button>
+</form>
