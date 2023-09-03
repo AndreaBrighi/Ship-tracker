@@ -69,6 +69,13 @@ export class BackendService {
         );
     }
 
+    public getAllRoutes() {
+      return this.http.get<any>(this.baseUrl + '/routereq/getall')
+        .pipe(
+          catchError(this.handleError)
+        );
+    }
+
     public registerShip(token: String, ship: ship) {
       return this.http.post<ship[]>(this.baseUrl + '/shipreq/register' , ship)
         .pipe(
