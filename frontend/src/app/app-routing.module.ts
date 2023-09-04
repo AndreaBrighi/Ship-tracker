@@ -45,6 +45,10 @@ const routes: Routes = [
     component: WatcherHomepageComponent,
     children: [
       {
+        path: 'user', // child route path
+        component: UserInfoComponent, // child route component that the router renders
+      },
+      {
         path: 'map',
         component: ShipsMapComponent, // another child route component that the router renders
       },

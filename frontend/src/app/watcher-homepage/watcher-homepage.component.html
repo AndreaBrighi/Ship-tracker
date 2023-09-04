@@ -1,8 +1,11 @@
 <nav>
-    <ul>
-        <li><a routerLink="/watcher/map">Ships</a></li>
-        <li><a routerLink="/watcher/chat">Chat</a></li>
-    </ul>
-    <button (click)="logout()">Logout</button>
+    <mat-toolbar>
+        <a routerLink="/watcher/map">Map</a>
+        
+        <a routerLink="/watcher/chat/ ">Chat</a>
+        <span class="spacer"></span>
+        <a routerLink="/watcher/user" class="button"><mat-icon>account_circle</mat-icon></a>
+        <button (click)="logout()" class="button"><mat-icon>logout</mat-icon></button>
+    </mat-toolbar>
 </nav>
 <router-outlet></router-outlet>
