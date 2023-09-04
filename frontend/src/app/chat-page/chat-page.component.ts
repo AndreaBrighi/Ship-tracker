@@ -69,7 +69,9 @@ export class ChatPageComponent {
         tmp.push(message);
 
     this.messagesMap.set(otherUser, new Set(tmp));
-    this.messages = Array.from(this.messagesMap.get(otherUser)|| []).sort((a, b) => a.counter - b.counter);
+    if(this.selectedContact == otherUser){
+      this.messages = Array.from(this.messagesMap.get(otherUser)|| []).sort((a, b) => a.counter - b.counter);
+    }
     this.contacts = Array.from(this.messagesMap.keys());
 
   }
