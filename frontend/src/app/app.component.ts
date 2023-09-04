@@ -27,10 +27,12 @@ export class AppComponent implements OnInit {
       .subscribe(
         (data) => {
           console.log(data);
-          if(data.status === 'success') {
-            this.loggerService.login(data.payload);
+          if(data != null) {
+            console.log('logged in');
+            this.loggerService.login(data);
           }
           else {
+            console.log('token expired');
             this._router.navigate(['/login']);
           }
           //localStorage.setItem('token', data.message);
