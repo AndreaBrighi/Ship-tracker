@@ -27,7 +27,7 @@ export class ChatPageComponent {
     console.log(message);
     const contact = this.selectedContact!!;
     this.contacts.push(contact);
-    this.messagingService.sendMessage(message, this.selectedContact!!);
+    this.messagingService.sendMessage(message, this.selectedContact!!, this.loggerService.getUsername()!!);
     if (!this.messages.has(contact)) {
       this.messages.set(contact, []);
     }
@@ -38,20 +38,28 @@ export class ChatPageComponent {
     this.selectedContact = this.route.snapshot.paramMap.get('contact')
     this.messagingService.message$.subscribe((message) => {
       console.log(message);
-      if(message.sender == this.selectedContact || message.reciever == this.selectedContact) {
-        if (!this.messages.has(message.reciever)) {
-          this.messages.set(message.reciever, []);
+      const user = this.loggerService.getUsername()!!;
+      if(message.sender == user || message.reciver == user) {
+        console.log("in");
+        if (!this.messages.has(message.reciver)) {
+          this.messages.set(message.reciver, []);
         }
-        if(message.sender == this.selectedContact) {
-          this.messages.get(message.reciever)?.push(message);
+        if(message.sender == user) {
+          console.log("sender");
+          this.messages.get(message.reciver)?.push(message);
         }
         else {
+          console.log("reciver");
           this.messages.get(message.sender)?.push(message);
         }
       }
+      this.contacts = Array.from(this.messages.keys());
 
     });
-    this.messagingService.getMessages(this.loggerService.user!!.username);
+    this.contacts = [];
+    this.messages = new Map();
+    this.messagingService.getMessages(this.loggerService.getUsername()!!);
+
   }
 
 }

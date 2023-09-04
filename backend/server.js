@@ -37,7 +37,10 @@ let clientConnected = new Map() //la mappa è coposta da una socket (key) + nome
 // event fired every time a new client connects:
 server.on("connection", (socket) => {
     socket.on("requestConnection", function(data) {
+        console.log("new connection request")
+        console.log(data)
         const jsonData = JSON.parse(data)
+        console.log(jsonData.name)
         clientConnected.set(socket, jsonData.name);
         // console.info("Client " + jsonData.name + " connected with "+`[id=${socket.id}]`);
     });
@@ -54,7 +57,8 @@ server.on("connection", (socket) => {
 
     socket.on("getMessages", async function(data) {
         const jsonData = JSON.parse(data) //include sender and reciver
-        socket.emit("allMessages", JSON.stringify(await dbMessages.getMessages_From_To(jsonData.sender)))
+        const allMessage = await (await dbMessages.getMessages_From_To(jsonData.sender)).payload
+        socket.emit("allMessages", JSON.stringify(allMessage))
     });
 
     // when socket disconnects, remove it from the list:

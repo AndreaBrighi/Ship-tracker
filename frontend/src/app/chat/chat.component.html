@@ -1,7 +1,7 @@
 <h1>{{selectedContact}}</h1>
 
 <ul>
-    <li *ngFor="let message of messages" [ngClass]="message.reciever == selectedContact ? 'my' : 'other' ">
+    <li *ngFor="let message of messages" [ngClass]="message.reciver == selectedContact ? 'my' : 'other' ">
         {{message.message}}
     </li>
 </ul>

@@ -15,14 +15,18 @@ export class MessagingService {
   }
 
 
-  public sendMessage(message: String, reciever: String) {
+  public sendMessage(message: String, reciever: String, username: String) {
     console.log('sendMessage: ', message)
-    this.socket.emit('newMessage', message);
+    const fullMessage = new chatMessage(username, message, reciever);
+    this.socket.emit('sendMessage', JSON.stringify(fullMessage));
   }
 
-  public getNewMessage() {
-    this.socket.on('allMessages', (messages: chatMessage[]) =>{
-      console.log('allMessages: ', messages)
+  public getMessages(user: String){
+    this.socket.emit('requestConnection', JSON.stringify({name: user}));
+    this.socket.emit('getMessages',JSON.stringify({sender: user}));
+    this.socket.on('allMessages', (messagesString: string) =>{
+      const messages: chatMessage[] = JSON.parse(messagesString);
+      console.log(messages)
       messages.forEach(message => {
         this.message$.next(message);
       });
@@ -34,9 +38,4 @@ export class MessagingService {
 
     return this.message$.asObservable();
   };
-
-  public getMessages(user: String){
-    this.socket.emit('requestConnection', {name: user});
-    this.socket.emit('getMessages',{sender: user});
-  }
 }

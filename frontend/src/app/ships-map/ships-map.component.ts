@@ -122,6 +122,9 @@ export class ShipsMapComponent implements AfterViewInit {
       });
     });
     marker.bindTooltip("<b>" + ship.name + "</b>");
+    if(ship.status === 'alarm') {
+     marker.openPopup();
+    }
     return marker;
   }
 
