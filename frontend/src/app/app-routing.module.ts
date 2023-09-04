@@ -45,16 +45,12 @@ const routes: Routes = [
     component: WatcherHomepageComponent,
     children: [
       {
-        path: 'user', // child route path
-        component: LoginComponent, // child route component that the router renders
-      },
-      {
         path: 'map',
         component: ShipsMapComponent, // another child route component that the router renders
       },
       {
         path: 'chat',
-        component: LoginComponent, // another child route component that the router renders
+        component: ChatPageComponent, // another child route component that the router renders
       }]
   },
   { path: 'create', component: CreateUserComponent },

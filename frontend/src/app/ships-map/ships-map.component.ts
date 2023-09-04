@@ -33,11 +33,11 @@ export class ShipsMapComponent implements AfterViewInit {
   private map: L.Map | undefined;
   private markers = new Map<ship, L.Marker>();
   private tick: any;
-  private showAllarm = false;
+  private isWatcher = false;
 
   private initMap(): void {
     //check
-    this._router.url === '/watcher' ? this.showAllarm = true : this.showAllarm = false;
+    this.isWatcher = this._router.url.includes("/watcher");
     console.log(this._router.url);
     this.getPosition().then((pos) => {
       console.log(pos);
@@ -114,7 +114,11 @@ export class ShipsMapComponent implements AfterViewInit {
     `);
     marker.on('popupopen', () => {
       this.elementRef.nativeElement.querySelector(`#${ship.name}`)?.addEventListener('click', () => {
-        this._router.navigate(['user/chat/' + ship.name]);
+        if(this.isWatcher) {
+          this._router.navigate(['watcher/chat'+ ship.name]);
+        }else{
+          this._router.navigate(['user/chat/' + ship.name]);
+        }
       });
     });
     marker.bindTooltip("<b>" + ship.name + "</b>");
