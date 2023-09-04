@@ -14,24 +14,29 @@ export class ChatPageComponent {
 
   protected contacts: String[] = [];
   protected selectedContact : String | null = null;
-  protected messages: Map<String, chatMessage[]> = new Map();
+  protected messagesMap: Map<String, Set<chatMessage>> = new Map();
+  protected messages: chatMessage[] = [];
 
   constructor(private http: HttpClient, private loggerService: LoggerService, private messagingService: MessagingService, private route: ActivatedRoute) { }
 
   selectContact(contact: String) {
     console.log(contact);
     this.selectedContact = contact;
+    this.messages = Array.from(this.messagesMap.get(contact)|| []).sort((a, b) => a.counter - b.counter);
   }
 
   sendMessage(message: String) {
     console.log(message);
     const contact = this.selectedContact!!;
     this.contacts.push(contact);
-    this.messagingService.sendMessage(message, this.selectedContact!!, this.loggerService.getUsername()!!);
-    if (!this.messages.has(contact)) {
-      this.messages.set(contact, []);
+    const counter = this.messagesMap.get(contact)?.size || 0;
+    this.messagingService.sendMessage(message, this.selectedContact!!, this.loggerService.getUsername()!!, counter);
+    if (!this.messagesMap.has(contact)) {
+      this.messagesMap.set(contact, new Set());
     }
-    this.messages.get(contact)?.push(new chatMessage(this.loggerService.user!!.username, message, contact));
+    let user = this.loggerService.getUsername()!!;
+    let fullMessage = new chatMessage(user, message, contact, counter);
+    this.updateMessages(fullMessage, user);
   }
   
   ngOnInit() {
@@ -40,25 +45,32 @@ export class ChatPageComponent {
       console.log(message);
       const user = this.loggerService.getUsername()!!;
       if(message.sender == user || message.reciver == user) {
-        console.log("in");
-        if (!this.messages.has(message.reciver)) {
-          this.messages.set(message.reciver, []);
-        }
+        var otherUser = message.sender;
         if(message.sender == user) {
-          console.log("sender");
-          this.messages.get(message.reciver)?.push(message);
+          otherUser = message.reciver;
         }
         else {
-          console.log("reciver");
-          this.messages.get(message.sender)?.push(message);
+         otherUser = message.sender;
         }
+        if (!this.messagesMap.has(otherUser)) {
+          this.messagesMap.set(otherUser, new Set());
+        }
+        this.updateMessages(message, otherUser);
       }
-      this.contacts = Array.from(this.messages.keys());
 
     });
-    this.contacts = [];
-    this.messages = new Map();
     this.messagingService.getMessages(this.loggerService.getUsername()!!);
+
+  }
+
+   updateMessages(message: chatMessage, otherUser: String) {
+    let tmp = Array.from(this.messagesMap.get(otherUser)||[])
+        .filter((m) => m.counter != message.counter);
+        tmp.push(message);
+
+    this.messagesMap.set(otherUser, new Set(tmp));
+    this.messages = Array.from(this.messagesMap.get(otherUser)|| []).sort((a, b) => a.counter - b.counter);
+    this.contacts = Array.from(this.messagesMap.keys());
 
   }
 
