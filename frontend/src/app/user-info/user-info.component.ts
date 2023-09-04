@@ -14,6 +14,7 @@ export class UserInfoComponent {
 
   newUsername: string = '';
   newPassword: string = '';
+  hide: boolean = true;
 
   constructor(private _router: Router, private http: HttpClient, private loggerService: LoggerService, private backendService: BackendService) { }
 
