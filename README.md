@@ -14,6 +14,11 @@ docker-compose up -d
 Per avviare il progetto in locale, questo crearà un container con il db, uno con il server REST API e uno con il client web del gestore.
 Viene anche creato un container che simula la nave e permette di ricevere i messaggi.
 
+## Requirements
+
+Per poter utilizzare il progetto è necessario avere installato docker e docker-compose.
+Inoltre è necessario avere installato mongorestore <https://www.mongodb.com/docs/database-tools/mongorestore/>
+
 ## Users
 
 Per usare il progetto è necessario creare un utente, oppure usare quello già creato:
