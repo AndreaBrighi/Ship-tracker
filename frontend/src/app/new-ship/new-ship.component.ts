@@ -18,6 +18,8 @@ selectedRoute: String = '';
 routes: String[] = [];
 latitude: number = 0.0;
 longitude: number = 0.0;
+error = false;
+message: String = '';
 
 constructor(private _router: Router, private http: HttpClient, private loggerService: LoggerService, private backendService: BackendService) {}
 
@@ -53,17 +55,21 @@ public addShip() {
     longitude: this.longitude
   },
   	status: 'normal',
-	owner: this.loggerService.user!!.username
+	owner: this.loggerService.getUsername()!!
   }
   this.backendService.addShip(newShip)
   .pipe(
     catchError((err) => {
-      console.log('error');
+      console.log('error1');
       console.log(err);
+      this.error = true;
+      this.message = err.message;
       return [];
     }))
     .subscribe(
       (data) => {
+        this.error = false;
+        this.message = '';
         console.log('data');
         console.log(data);
         this._router.navigate(['/user/ship']);

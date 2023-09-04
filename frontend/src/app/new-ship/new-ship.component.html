@@ -1,8 +1,12 @@
-<p>new-ship works!</p>
-<a routerLink="/user/ship">Back to ships list</a>
-<form>
-   <input type="text" [(ngModel)]="newShipName" name="NewShipName" placeholder="New ship name">
-   <mat-form-field>
+<main>
+  <h1>Add ship</h1>
+  <form>
+    <mat-form-field >
+      <mat-label>NewShipName</mat-label>
+      <input type="text" matInput [(ngModel)]="newShipName" name="NewShipName" placeholder="New ship name">
+    </mat-form-field>
+    <br>
+    <mat-form-field>
       <mat-label>Route</mat-label>
       <mat-select (selectionChange)="changeRoute($event.value)">
         <mat-option  *ngFor="let route of routes" [value]="route">
@@ -10,7 +14,28 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-   <input type="number" [(ngModel)]="latitude" name="latitude" placeholder="0.0">
-   <input type="number" [(ngModel)]="longitude" name="longitude" placeholder="0.0">
-   <button (click)="addShip()">Add ship</button>
-</form>
+    <br>
+    <mat-form-field >
+      <mat-label>Latitude</mat-label>
+      <input matInput type="number" [(ngModel)]="latitude" name="latitude" placeholder="0.0">
+    </mat-form-field>
+    <br>
+    <mat-form-field >
+      <mat-label>Longitude</mat-label>
+      <input matInput  type="number" [(ngModel)]="longitude" name="longitude" placeholder="0.0">
+    </mat-form-field>
+    <br>
+  </form>
+  <div>
+    <button mat-raised-button color="primary" (click)="addShip()">Add ship</button>
+    <a mat-stroked-button color="primary" routerLink="/user/ship">Back to ships list</a>
+  </div>
+
+  <div *ngIf="error; then errorMessage">
+    Here is never showing
+  </div>
+
+  <ng-template #errorMessage>
+      <p class="error">{{message}}</p>
+  </ng-template>
+</main>

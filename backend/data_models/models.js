@@ -59,6 +59,9 @@ exports.registerShip = function() {
               "latitude"
             ]
           },
+          "status": {
+            "type": "string"
+          },
           "owner": {
             "type": "string"
           }
