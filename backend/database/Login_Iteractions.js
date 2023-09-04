@@ -58,7 +58,7 @@ exports.createUser = async function(credentials, res) {
 	console.log("token:", token)
 	res.cookie("token", token, { maxAge: jwtExpirySeconds * 1000 })
 
-	return {status: "success", message: "User successfully created", payload: {token: userCreated.token, userType: userCreated.userType}}
+	return {status: "success", message: "User successfully created", payload: {token: userCreated.token, userType: userCreated.userType, username: userCreated.username}}
 }
 
 exports.userAlreadyExists = async function(user) {
