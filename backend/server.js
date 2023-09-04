@@ -30,9 +30,7 @@ app.use('/towerreq', towerRouter)
 
 
 
-const
-    {Server} = require("socket.io"),
-    server = new Server(3001);
+const server = require('socket.io')(3001, {cors: {origin: "*"}});
 let clientConnected = new Map() //la mappa è coposta da una socket (key) + nome della nave
 
 
@@ -56,7 +54,7 @@ server.on("connection", (socket) => {
 
     socket.on("getMessages", async function(data) {
         const jsonData = JSON.parse(data) //include sender and reciver
-        socket.emit("allMessages", JSON.stringify(await dbMessages.getMessages_From_To(jsonData.sender, jsonData.reciver)))
+        socket.emit("allMessages", JSON.stringify(await dbMessages.getMessages_From_To(jsonData.sender)))
     });
 
     // when socket disconnects, remove it from the list:

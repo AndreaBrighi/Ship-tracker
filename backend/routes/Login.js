@@ -9,7 +9,7 @@ router.use(express.json());
 router.get('/token/:token', async function(req, res) {
     const response = await db.loginViaToken(req.params.token); 
     if(!response.found) {
-        res.json({status: "error", message: "No user found. Login with credentials"})
+        res.status(401).send("No user found. Login with credentials")
         return;
     }
     res.json(response.payload)

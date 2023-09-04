@@ -19,10 +19,10 @@ exports.storeMessage = async function(messageJSON) {
     return;
 }
 
-exports.getMessages_From_To = async function(msgSender, msgReciver) {
+exports.getMessages_From_To = async function(msgSender) {
     const allMessages = await Message.find({$or:[
-                                            {sender: msgSender, reciver: msgReciver},
-                                            {sender: msgReciver, reciver: msgSender}]})
+                                            {sender: msgSender},
+                                            {reciver: msgSender}]})
                                             .select(["-_id", "-__v"]).sort({counter:1});
     return {size: allMessages.length, payload: allMessages}
 }
