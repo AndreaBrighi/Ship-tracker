@@ -8,6 +8,9 @@ import { ship } from 'src/data/ship';
   styleUrls: ['./ship-item.component.scss']
 })
 export class ShipItemComponent {
+editShip() {
+throw new Error('Method not implemented.');
+}
   
   @Input() ship!: ship
 

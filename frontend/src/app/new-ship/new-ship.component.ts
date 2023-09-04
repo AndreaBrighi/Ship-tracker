@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { LoggerService } from '../logger.service';
 import { BackendService } from '../backend.service';
 import { catchError } from 'rxjs';
+import { ship } from 'src/data/ship';
 
 @Component({
   selector: 'app-new-ship',
@@ -11,10 +12,9 @@ import { catchError } from 'rxjs';
   styleUrls: ['./new-ship.component.scss']
 })
 export class NewShipComponent {
-addShip() {
-throw new Error('Method not implemented.');
-}
+
 newShipName: String = '';
+selectedRoute: String = '';
 routes: String[] = [];
 latitude: number = 0.0;
 longitude: number = 0.0;
@@ -38,4 +38,36 @@ ngOnInit() {
     )
  }
 
+ changeRoute(route: String) {
+  console.log('changeRoute');
+  this.selectedRoute = route;
+}
+
+public addShip() {
+  console.log('addShip');
+  const newShip : ship = {
+    name: this.newShipName,
+	choosed_route: this.selectedRoute,
+	actual_position: {
+    latitude: this.latitude,
+    longitude: this.longitude
+  },
+  	status: 'normal',
+	owner: this.loggerService.user!!.username
+  }
+  this.backendService.addShip(newShip)
+  .pipe(
+    catchError((err) => {
+      console.log('error');
+      console.log(err);
+      return [];
+    }))
+    .subscribe(
+      (data) => {
+        console.log('data');
+        console.log(data);
+        this._router.navigate(['/user/ship']);
+        }
+    )
+  }
 }

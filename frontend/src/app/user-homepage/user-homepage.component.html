@@ -1,11 +1,12 @@
-<p>logged-page works!</p>
 <nav>
-    <ul>
-        <li><a routerLink="/user/user">User</a></li>
-        <li><a routerLink="/user/map">Map</a></li>
-        <li><a routerLink="/user/ship">Ships</a></li>
-        <li><a routerLink="/user/chat">Chat</a></li>
-    </ul>
-    <button (click)="logout()">Logout</button>
+    <mat-toolbar>
+        <a routerLink="/user/map">Map</a>
+        
+        <a routerLink="/user/ship">Ships</a>
+        <a routerLink="/user/chat/ ">Chat</a>
+        <span class="spacer"></span>
+        <a routerLink="/user/user" class="button"><mat-icon>account_circle</mat-icon></a>
+        <button (click)="logout()" class="button"><mat-icon>logout</mat-icon></button>
+    </mat-toolbar>
 </nav>
 <router-outlet></router-outlet>

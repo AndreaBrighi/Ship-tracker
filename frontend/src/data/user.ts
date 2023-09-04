@@ -1,9 +1,9 @@
-interface user {
-    data: userData;
+export interface userData {
+    data: user;
     ship: shipData;
 }
 
-interface userData {
+export interface user {
     username: string;
     token: string;
     userType: string;
@@ -12,5 +12,3 @@ interface userData {
 interface shipData {
     own: boolean;
 }
-
-export default user;

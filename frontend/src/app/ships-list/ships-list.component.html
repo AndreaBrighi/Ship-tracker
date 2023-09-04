@@ -1,7 +1,10 @@
-<p>ships-list works!</p>
-<a routerLink="/user/newShip">Add new ship</a>
-<ul>
-    <li *ngFor="let ship of ships">
-        <app-ship-item [ship]="ship"></app-ship-item>
-    </li>
-</ul>
+<main>
+    <a mat-raised-button color="primary" routerLink="/user/newShip">Add new ship</a>
+    <div>
+        <ul>
+            <li *ngFor="let ship of ships">
+                <app-ship-item [ship]="ship"></app-ship-item>
+            </li>
+        </ul>
+    </div>
+</main>

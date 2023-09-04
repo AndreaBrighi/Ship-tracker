@@ -15,10 +15,10 @@ export class ShipsListComponent {
 
   ships = new Array<ship>(0);
 
-  constructor(private _router: Router, private http: HttpClient, private loggerService: LoggerService, private backendService: BackendService) {}
+  constructor(private _router: Router, private loggerService: LoggerService, private backendService: BackendService) {}
   
   ngOnInit() {
-    this.backendService.getMyShips(this.loggerService.user!!.data.username)
+    this.backendService.getMyShips(this.loggerService.getUsername()!!)
     .pipe(
       catchError((err) => {
         console.log('error');

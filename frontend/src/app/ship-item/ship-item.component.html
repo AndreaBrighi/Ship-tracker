@@ -1,3 +1,14 @@
-<p>ship-item works!</p>
+<div>
+    <div>
+        <ul>
+            <li>name: {{ship.name}}</li>
+            <li>route: {{ship.choosed_route}}</li>
+            <li>position: {{ship.actual_position.latitude}}° lat, {{ship.actual_position.longitude}}° lon</li>
+            <li>status: {{ship.status}}</li>
+        </ul>
+    </div>
+    <div>
+        <button mat-stroked-button color="primary" (click)="editShip()"><mat-icon>edit</mat-icon></button>
+    </div>
 
-<p>{{ship.name}}</p>
+</div>

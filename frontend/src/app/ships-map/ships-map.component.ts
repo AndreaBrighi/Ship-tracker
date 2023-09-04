@@ -1,9 +1,7 @@
-import { AfterViewInit, Component, Input } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { AfterViewInit, Component, ElementRef } from '@angular/core';
 import * as L from 'leaflet';
-import { Observable, timer } from 'rxjs';
+import { timer } from 'rxjs';
 import {ship, coordinates } from '../../data/ship';
-import query from '../../data/query';
 import { BackendService } from '../backend.service';
 import { LoggerService } from '../logger.service';
 import { Router } from '@angular/router';
@@ -30,7 +28,7 @@ L.Marker.prototype.options.icon = iconDefault;
 })
 export class ShipsMapComponent implements AfterViewInit {
 
-  constructor(private backend: BackendService, private login: LoggerService, private _router: Router) { }
+  constructor(private backend: BackendService, private login: LoggerService, private _router: Router, public elementRef : ElementRef) { }
 
   private map: L.Map | undefined;
   private markers = new Map<ship, L.Marker>();
@@ -38,6 +36,7 @@ export class ShipsMapComponent implements AfterViewInit {
   private showAllarm = false;
 
   private initMap(): void {
+    //check
     this._router.url === '/watcher' ? this.showAllarm = true : this.showAllarm = false;
     console.log(this._router.url);
     this.getPosition().then((pos) => {
@@ -110,7 +109,14 @@ export class ShipsMapComponent implements AfterViewInit {
     <p>${ship.actual_position.latitude}</p>
     <p>${ship.actual_position.longitude}</p>
     <p>${ship.status}</p>
+    <p>${ship.choosed_route}</p>
+    <button id =${ship.name} class="mapMarker"">chat</button>
     `);
+    marker.on('popupopen', () => {
+      this.elementRef.nativeElement.querySelector(`#${ship.name}`)?.addEventListener('click', () => {
+        this._router.navigate(['user/chat/' + ship.name]);
+      });
+    });
     marker.bindTooltip("<b>" + ship.name + "</b>");
     return marker;
   }

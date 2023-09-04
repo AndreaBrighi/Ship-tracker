@@ -1,10 +1,10 @@
 <p>new-ship works!</p>
-<a routerLink="/user/ships">Back to ships list</a>
+<a routerLink="/user/ship">Back to ships list</a>
 <form>
    <input type="text" [(ngModel)]="newShipName" name="NewShipName" placeholder="New ship name">
    <mat-form-field>
       <mat-label>Route</mat-label>
-      <mat-select>
+      <mat-select (selectionChange)="changeRoute($event.value)">
         <mat-option  *ngFor="let route of routes" [value]="route">
           {{route}}
         </mat-option>

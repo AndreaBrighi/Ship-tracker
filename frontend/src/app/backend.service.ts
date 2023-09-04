@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import message from 'src/data/message';
-import user from 'src/data/user';
+import { user, userData } from 'src/data/user';
 import { catchError, throwError } from 'rxjs';
 import { ship } from 'src/data/ship';
 
@@ -18,7 +18,7 @@ export class BackendService {
 
     public login(username: String, password: String) {
       let credential = {username: username, password: password};
-      return this.http.post<user | undefined>(this.baseUrl + '/login/credentials/', credential)
+      return this.http.post<userData | undefined>(this.baseUrl + '/login/credentials/', credential)
         .pipe(
           catchError(this.handleError)
         );
@@ -26,7 +26,7 @@ export class BackendService {
 
     public createuser(username: String, password: String) {
       let credential = {username: username, password: password};
-      return this.http.post<user>(this.baseUrl + '/create/credentials/', credential)
+      return this.http.post<message<user>>(this.baseUrl + '/login/register/', credential)
         .pipe(
           catchError(this.handleError)
         );
@@ -94,6 +94,6 @@ export class BackendService {
           `Backend returned code ${error.status}, body was: `, error.error);
       }
       // Return an observable with a user-facing error message.
-      return throwError(() => new Error('Something bad happened; please try again later.'));
+      return throwError(() => new Error(error.error));
     }
 }

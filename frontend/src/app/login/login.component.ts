@@ -13,16 +13,23 @@ import { catchError } from 'rxjs';
 export class LoginComponent {
   username: string = '';
   password: string = '';
+  hide = true;
+  error = false;
+  message = '';
 
   constructor(private _router: Router, private http: HttpClient, private loggerService: LoggerService, private backendService: BackendService) { }
 
   login() {
     console.log('login');
+    console.log(this.username);
+    console.log(this.password);
     this.backendService.login(this.username, this.password)
     .pipe(
       catchError((err) => {
-        console.log('error');
+        console.log('error1');
         console.log(err);
+        this.error = true;
+        this.message = err.message;
         return [];
       }))
       .subscribe(
@@ -30,7 +37,8 @@ export class LoginComponent {
           console.log('data');
           console.log(data);
           if(data !==  undefined) {
-            this.loggerService.login(data);
+            this.error = false;
+            this.loggerService.login(data.data);
             /*localStorage.setItem('token', data.payload.data.token);
             console.log('token set');
             console.log(localStorage.getItem('token'));

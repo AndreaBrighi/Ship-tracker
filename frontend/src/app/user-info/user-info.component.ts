@@ -19,7 +19,7 @@ export class UserInfoComponent {
 
   changePassword() {
     console.log('changePassword');
-    this.backendService.changePassword(this.loggerService.user!!.data.username, this.newPassword)
+    this.backendService.changePassword(this.loggerService.user!!.username, this.newPassword)
     .pipe(
       catchError((err) => {
         console.log('error');
@@ -35,7 +35,7 @@ export class UserInfoComponent {
 
   changeUsername() {
     console.log('changeUsername');
-    this.backendService.changeUsername(this.loggerService.user!!.data.username, this.newUsername)
+    this.backendService.changeUsername(this.loggerService.user!!.username, this.newUsername)
     .pipe(
       catchError((err) => {
         console.log('error');

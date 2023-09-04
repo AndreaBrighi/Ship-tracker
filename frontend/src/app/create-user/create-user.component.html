@@ -1,6 +1,35 @@
-<p>create-user works!</p>
-<form>
-    <input type="text" [(ngModel)]="username" name="username" placeholder="Username">
-    <input type="password" [(ngModel)]="password" name="password" placeholder="Password">
-</form>
-<button (click)="createuser()">Crea utente</button>
+<header>
+    <mat-toolbar>
+        <span>Ship Tracker</span>
+    </mat-toolbar>
+</header>
+<main>
+    <h1>Create user</h1>
+    <form>
+        <mat-form-field >
+            <mat-label>Username</mat-label>
+            <input matInput placeholder="Username" [(ngModel)]="username" name="username" id="username">
+        </mat-form-field>
+        <br>
+        <mat-form-field >
+        <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'" [(ngModel)]="password" name="password" id="password">
+        <mat-icon matSuffix (click)="hide = !hide" class="icon">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </mat-form-field>
+    </form>
+    <div>
+        <button mat-raised-button color="primary" (click)="createuser()">Create user</button>
+        <button mat-stroked-button color="primary" (click)="goBack()">Use login</button>
+    </div>
+
+    <div *ngIf="error; then errorMessage">
+        Here is never showing
+    </div>
+
+    <ng-template #errorMessage>
+        <p class="error">{{message}}</p>
+    </ng-template>
+</main>
+
+<footer>
+
+</footer>

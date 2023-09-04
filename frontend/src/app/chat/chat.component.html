@@ -1,0 +1,12 @@
+<h1>{{selectedContact}}</h1>
+
+<ul>
+    <li *ngFor="let message of messages" [ngClass]="message.reciever == selectedContact ? 'my' : 'other' ">
+        {{message.message}}
+    </li>
+</ul>
+
+<form>
+    <input type="text" [(ngModel)]="newMessage" name="newMessage" placeholder="New message">
+    <button (click)="sendMessage()">Send</button>
+</form>
