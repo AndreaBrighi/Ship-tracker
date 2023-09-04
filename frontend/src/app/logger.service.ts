@@ -14,9 +14,9 @@ export class LoggerService {
 
   login(user: user) {
     this.user = user;
-    sessionStorage.setItem('token', user.data.token);
+    localStorage.setItem('token', user.data.token);
     if(user.data.userType === 'user'){
-      this._router.navigate(['/user']);
+      this._router.navigate(['/user/ship']);
     }else if(user.data.userType === 'controller'){
       this._router.navigate(['/watcher']);
     }
@@ -25,7 +25,7 @@ export class LoggerService {
 
   logout() {
     this.user = undefined;
-    sessionStorage.removeItem('token');
+    localStorage.removeItem('token');
     this._router.navigate(['/login']);
     console.log('logged out');
   }

@@ -33,7 +33,7 @@ export class BackendService {
     }
 
     public getuser(token: String) {
-      return this.http.get<message<user>>(this.baseUrl + '/login/token/' + token)
+      return this.http.get<user>(this.baseUrl + '/login/token/' + token)
         .pipe(
           catchError(this.handleError)
         );
@@ -76,7 +76,7 @@ export class BackendService {
         );
     }
 
-    public registerShip(token: String, ship: ship) {
+    public addShip(ship: ship) {
       return this.http.post<ship[]>(this.baseUrl + '/shipreq/register' , ship)
         .pipe(
           catchError(this.handleError)
