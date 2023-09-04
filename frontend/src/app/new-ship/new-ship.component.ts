@@ -60,7 +60,6 @@ public addShip() {
   this.backendService.addShip(newShip)
   .pipe(
     catchError((err) => {
-      console.log('error1');
       console.log(err);
       this.error = true;
       this.message = err.message;
