@@ -15,6 +15,7 @@ export class UserInfoComponent {
   newUsername: string = '';
   newPassword: string = '';
   hide: boolean = true;
+  username: String = '';
 
   constructor(private _router: Router, private http: HttpClient, private loggerService: LoggerService, private backendService: BackendService) { }
 
@@ -48,6 +49,10 @@ export class UserInfoComponent {
           console.log('data');
           }
       )
+  }
+
+  ngOnInit() {
+    this.username = this.loggerService.getUsername()!!;
   }
 
 }

@@ -41,7 +41,7 @@ export class BackendService {
 
     public changePassword(username: String, password: String) {
       let credential = {username: username, password: password};
-      return this.http.put<message<user>>(this.baseUrl + '/change/password', credential)
+      return this.http.put<message<user>>(this.baseUrl + '/login/change/password', credential)
         .pipe(
           catchError(this.handleError)
         );
@@ -49,7 +49,7 @@ export class BackendService {
 
     public changeUsername(username: String, newUsername: String) {
       let credential = {username: username, newusername: newUsername};
-      return this.http.put<message<user>>(this.baseUrl + '/change/username', credential)
+      return this.http.put<message<user>>(this.baseUrl + '/login/change/user', credential)
         .pipe(
           catchError(this.handleError)
         );

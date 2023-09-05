@@ -2,7 +2,7 @@
     <app-chat-contacts [contacts]="contacts" (selectContact)="selectContact($event)"></app-chat-contacts>
 </aside>
 <main>
-    <div *ngIf="selectedContact != null; then chat else noChat">
+    <div *ngIf="selectedContact != null && selectContact?.toString()?.trim() == ''; then chat else noChat">
         Here is never showing
     </div>
     
