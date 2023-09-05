@@ -1,0 +1,20 @@
+<h1>{{selectedContact}}</h1>
+<div>
+    <div class="chat">
+        <ul>
+            <li *ngFor="let message of messages" [ngClass]="message.reciver == selectedContact ? 'my' : 'other' ">
+                {{message.message}}
+            </li>
+        </ul>
+    </div>
+
+    <div class="sender">
+        <form>
+            <mat-form-field >
+                <mat-label>Username</mat-label>
+                <input matInput placeholder="New message" [(ngModel)]="newMessage" name="newMessage">
+            </mat-form-field>
+            <button mat-raised-button color="primary" (click)="sendMessage()">Send</button>
+        </form>
+    </div>
+</div>

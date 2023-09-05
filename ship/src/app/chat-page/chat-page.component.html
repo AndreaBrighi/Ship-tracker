@@ -1,0 +1,16 @@
+<aside>
+    <app-chat-contacts [contacts]="contacts" (selectContact)="selectContact($event)"></app-chat-contacts>
+</aside>
+<main>
+    <div *ngIf="selectedContact != null && selectContact?.toString()?.trim() == ''; then chat else noChat">
+        Here is never showing
+    </div>
+    
+    <ng-template #chat>
+        <app-chat [selectedContact]="selectedContact!!" [messages]="messages" (sendMessages)="sendMessage($event)"></app-chat>
+    </ng-template>
+    
+    <ng-template #noChat>
+        <p>Select a contact to start chatting</p>
+    </ng-template>
+</main>

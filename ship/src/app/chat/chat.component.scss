@@ -1,0 +1,37 @@
+.other{
+    display: flex;
+     justify-content:left; 
+     align-items:left;
+}
+
+.my{
+    display: flex; 
+    justify-content:right; 
+    align-items:right;
+}
+
+ul{
+    list-style-type: none;
+    padding: 0;
+}
+
+form { 
+    button {
+        margin-bottom: 1em;
+        padding: 2em 0;
+        line-height: 1.4;
+      }
+  }
+
+.chat{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+.sender{
+    position: absolute;
+    bottom: 40%;
+}

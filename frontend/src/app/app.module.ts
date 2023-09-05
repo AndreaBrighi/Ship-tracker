@@ -11,7 +11,6 @@ import { CreateUserComponent } from './create-user/create-user.component';
 import { ShipsMapComponent } from './ships-map/ships-map.component';
 import { UserHomepageComponent } from './user-homepage/user-homepage.component';
 import { WatcherHomepageComponent } from './watcher-homepage/watcher-homepage.component';
-import { provideRouter } from '@angular/router';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { ShipsListComponent } from './ships-list/ships-list.component';
 import { ShipItemComponent } from './ship-item/ship-item.component';
@@ -26,7 +25,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from  '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -57,7 +55,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     MatButtonModule, 
     MatIconModule,
     MatInputModule,
-    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
