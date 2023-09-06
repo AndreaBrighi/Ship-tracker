@@ -27,7 +27,10 @@ export class ChangeRouteComponent {
         this.dialogRef.close();
       }
     )
-    
+  }
+
+  cancel(){
+    this.dialogRef.close();
   }
 
   changeRoute(newRoute: String) {

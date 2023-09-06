@@ -26,11 +26,15 @@ main{
     margin-top: 10px;
     margin-bottom: 20px;
     div{
-        width: 40%;
+        width: 100%;
+         display: flex;
+        justify-content: center;
+        align-items: center;
         button{
             margin-left: 3%;
             margin-right: 3%;
-            width: 40%;
+            width: 30%;
+            max-width: 200px;
         }
     }
 }

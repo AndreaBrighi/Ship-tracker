@@ -1,13 +1,16 @@
-<p>change-route works!</p>
-
-<mat-form-field>
-    <mat-label>Route</mat-label>
-    <mat-select (selectionChange)="changeRoute($event.value)">
-      <mat-option  *ngFor="let route of routes" [value]="route">
-        {{route}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <br>
-
-<button mat-raised-button color="primary" (click)="confirm()">Confirm</button>
+<div>
+  <h1>change route</h1>
+  <mat-form-field>
+      <mat-label>Route</mat-label>
+      <mat-select (selectionChange)="changeRoute($event.value)">
+        <mat-option  *ngFor="let route of routes" [value]="route">
+          {{route}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br>
+    <div>
+      <button mat-raised-button color="primary" (click)="confirm()">Confirm</button>
+      <button mat-stroked-button color="primary" (click)="cancel()">Cancel</button>
+    </div>
+</div>
