@@ -1,1 +1,13 @@
-<app-chat-page></app-chat-page>
+<nav>
+  <mat-toolbar>
+      <span>{{ship}}</span>
+      <span class="spacer"></span>
+      
+  </mat-toolbar>
+</nav>
+<div>
+  <button mat-stroked-button color="primary" (click)="changeStatus()"> status:
+    {{alertStatus? 'Alert' : 'Normal'}}
+  </button>
+  <app-chat-page></app-chat-page>
+</div>

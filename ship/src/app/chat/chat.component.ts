@@ -20,4 +20,10 @@ export class ChatComponent {
     this.sendMessages.emit(this.newMessage);
     }
 
+  ngOnInit() {
+    console.log("chat component")
+    console.log(this.selectedContact);
+    console.log(this.messages);
+  }
+
 }

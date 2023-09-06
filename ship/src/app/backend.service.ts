@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import message from 'src/data/message';
-import { user, userData } from 'src/data/user';
 import { catchError, throwError } from 'rxjs';
-import { ship } from 'src/data/ship';
+import { coordinates } from 'src/data/coordinates';
 
 @Injectable({
   providedIn: 'root'
@@ -16,73 +14,30 @@ export class BackendService {
     private http: HttpClient,
   ) { }
 
-    public login(username: String, password: String) {
-      let credential = {username: username, password: password};
-      return this.http.post<userData | undefined>(this.baseUrl + '/login/credentials/', credential)
+    public updatePosition(ship: String, position: coordinates) {
+      return this.http.put<any>(this.baseUrl + '/shipreq/change/position/', {
+        shipname: ship,
+        newposition: position
+      })
         .pipe(
           catchError(this.handleError)
         );
     }
 
-    public createuser(username: String, password: String) {
-      let credential = {username: username, password: password};
-      return this.http.post<message<user>>(this.baseUrl + '/login/register/', credential)
+    public setAlarm(ship: String) {
+      return this.http.put<any>(this.baseUrl + '/shipreq//change/toallarm/'+ship, {})
         .pipe(
           catchError(this.handleError)
         );
     }
 
-    public getuser(token: String) {
-      return this.http.get<user>(this.baseUrl + '/login/token/' + token)
+    public setNormal(ship: String) {
+      return this.http.put<any>(this.baseUrl + '/shipreq//change/tonormal/'+ship, {})
         .pipe(
-          catchError(this.handleError)
+          catchError(this.handleError)  
         );
     }
-
-    public changePassword(username: String, password: String) {
-      let credential = {username: username, password: password};
-      return this.http.put<message<user>>(this.baseUrl + '/login/change/password', credential)
-        .pipe(
-          catchError(this.handleError)
-        );
-    }
-
-    public changeUsername(username: String, newUsername: String) {
-      let credential = {username: username, newusername: newUsername};
-      return this.http.put<message<user>>(this.baseUrl + '/login/change/user', credential)
-        .pipe(
-          catchError(this.handleError)
-        );
-    }
-
-    public getShips() {
-      return this.http.get<ship[]>(this.baseUrl + '/shipreq/getall')
-        .pipe(
-          catchError(this.handleError)
-        );
-    }
-
-    public getMyShips(user: String) {
-      return this.http.get<ship[]>(this.baseUrl + '/shipreq/getallfor/' + user)
-        .pipe(
-          catchError(this.handleError)
-        );
-    }
-
-    public getAllRoutes() {
-      return this.http.get<any>(this.baseUrl + '/routereq/getall')
-        .pipe(
-          catchError(this.handleError)
-        );
-    }
-
-    public addShip(ship: ship) {
-      return this.http.post<ship[]>(this.baseUrl + '/shipreq/register' , ship)
-        .pipe(
-          catchError(this.handleError)
-        );
-    }
-
+    
     private handleError(error: HttpErrorResponse) {
       if (error.status === 0) {
         // A client-side or network error occurred. Handle it accordingly.

@@ -23,6 +23,7 @@ export class ChatPageComponent {
     console.log(contact);
     this.selectedContact = contact;
     this.messages = Array.from(this.messagesMap.get(contact)|| []).sort((a, b) => a.counter - b.counter);
+    console.log(this.messages);
   }
 
   sendMessage(message: String) {
@@ -36,11 +37,10 @@ export class ChatPageComponent {
     }
     let user = this.loggerService.getUsername()!!;
     let fullMessage = new chatMessage(user, message, contact, counter);
-    this.updateMessages(fullMessage, user);
+    this.updateMessages(fullMessage, contact);
   }
   
   ngOnInit() {
-    this.selectedContact = this.route.snapshot.paramMap.get('contact')
     this.messagingService.message$.subscribe((message) => {
       console.log(message);
       const user = this.loggerService.getUsername()!!;
