@@ -18,6 +18,10 @@ export class ShipsListComponent {
   constructor(private _router: Router, private loggerService: LoggerService, private backendService: BackendService) {}
   
   ngOnInit() {
+    this.update();
+   }
+   
+  update() {
     this.backendService.getMyShips(this.loggerService.getUsername()!!)
     .pipe(
       catchError((err) => {
@@ -34,6 +38,6 @@ export class ShipsListComponent {
           }
         }
       )
-   }
+    }
 
 }

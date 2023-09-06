@@ -6,7 +6,7 @@
         <a routerLink="/user/chat/ ">Chat</a>
         <span class="spacer"></span>
         <a routerLink="/user/user" class="button"><mat-icon>account_circle</mat-icon></a>
-        <button (click)="logout()" class="button"><mat-icon>logout</mat-icon></button>
+        <button mat-stroked-button color="primary" (click)="logout()" class="button"><mat-icon>logout</mat-icon></button>
     </mat-toolbar>
 </nav>
 <router-outlet></router-outlet>

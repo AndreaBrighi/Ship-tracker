@@ -3,7 +3,7 @@
     <div>
         <ul>
             <li *ngFor="let ship of ships">
-                <app-ship-item [ship]="ship"></app-ship-item>
+                <app-ship-item [ship]="ship" (update)="update()"></app-ship-item>
             </li>
         </ul>
     </div>

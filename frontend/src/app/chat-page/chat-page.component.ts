@@ -36,7 +36,7 @@ export class ChatPageComponent {
     }
     let user = this.loggerService.getUsername()!!;
     let fullMessage = new chatMessage(user, message, contact, counter);
-    this.updateMessages(fullMessage, user);
+    this.updateMessages(fullMessage, contact);
   }
   
   ngOnInit() {

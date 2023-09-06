@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -25,6 +24,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from  '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ChangeRouteComponent } from './change-route/change-route.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { MatInputModule } from '@angular/material/input';
     ChatComponent,
     NewShipComponent,
     ChatPageComponent,
+    ChangeRouteComponent,
   ],
   imports: [
     BrowserModule,
@@ -55,6 +57,7 @@ import { MatInputModule } from '@angular/material/input';
     MatButtonModule, 
     MatIconModule,
     MatInputModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
